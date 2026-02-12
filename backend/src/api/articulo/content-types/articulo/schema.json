@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articulos",
+  "info": {
+    "singularName": "articulo",
+    "pluralName": "articulos",
+    "displayName": "Articulo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    },
+    "extracto": {
+      "type": "text"
+    },
+    "contenido": {
+      "type": "richtext",
+      "required": true
+    },
+    "imagenDestacada": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "fechaPublicacion": {
+      "type": "datetime"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    }
+  }
+}

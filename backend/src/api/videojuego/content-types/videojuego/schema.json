@@ -1,0 +1,83 @@
+{
+  "kind": "collectionType",
+  "collectionName": "videojuegos",
+  "info": {
+    "singularName": "videojuego",
+    "pluralName": "videojuegos",
+    "displayName": "Videojuego"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    },
+    "descripcionCorta": {
+      "type": "string",
+      "required": true
+    },
+    "descripcionCompleta": {
+      "type": "richtext"
+    },
+    "fechaLanzamiento": {
+      "type": "date"
+    },
+    "desarrolladora": {
+      "type": "string"
+    },
+    "puntuacion": {
+      "type": "decimal"
+    },
+    "imagenPrincipal": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "galeria": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    },
+    "destacado": {
+      "type": "boolean"
+    },
+    "generos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::genero.genero",
+      "mappedBy": "videojuegos"
+    },
+    "plataformas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::plataforma.plataforma",
+      "mappedBy": "videojuegos"
+    }
+  }
+}

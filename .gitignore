@@ -1,0 +1,27 @@
+﻿# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Strapi
+.strapi/
+.env
+build/
+.cache/
+exports/
+
+# Astro
+dist/
+.astro/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

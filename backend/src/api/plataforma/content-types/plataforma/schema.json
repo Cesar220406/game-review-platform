@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plataformas",
+  "info": {
+    "singularName": "plataforma",
+    "pluralName": "plataformas",
+    "displayName": "Plataforma"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nombre",
+      "required": true
+    },
+    "icono": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "videojuegos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::videojuego.videojuego",
+      "inversedBy": "plataformas"
+    }
+  }
+}
