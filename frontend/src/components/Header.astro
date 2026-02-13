@@ -1,0 +1,100 @@
+<header class="bg-dark-primary border-b border-dark-tertiary">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+
+    <!-- Logo + Texto -->
+    <a href="/" class="flex items-center gap-3">
+      <!-- Dado animado -->
+      <div class="dice-container">
+        <img src="/img/d1.webp" alt="PixelCrit" class="dice-face active" data-index="0">
+        <img src="/img/d2.webp" alt="" class="dice-face" data-index="1">
+        <img src="/img/d3.webp" alt="" class="dice-face" data-index="2">
+        <img src="/img/d4.webp" alt="" class="dice-face" data-index="3">
+        <img src="/img/d5.webp" alt="" class="dice-face" data-index="4">
+        <img src="/img/d6.webp" alt="" class="dice-face" data-index="5">
+        <img src="/img/d7.webp" alt="" class="dice-face" data-index="6">
+        <img src="/img/d8.webp" alt="" class="dice-face" data-index="7">
+        <img src="/img/d9.webp" alt="" class="dice-face" data-index="8">
+        <img src="/img/d10.webp" alt="" class="dice-face" data-index="9">
+      </div>
+      <!-- Texto del logo -->
+      <img src="/img/logocontexto.webp" alt="PixelCrit" class="logo-text">
+    </a>
+
+    <!-- Navegación -->
+    <nav class="hidden md:flex gap-6 text-text-secondary font-medium">
+      <a href="/" class="hover:text-primary transition">Inicio</a>
+      <a href="/videojuegos" class="hover:text-primary transition">Videojuegos</a>
+      <a href="/generos" class="hover:text-primary transition">Géneros</a>
+      <a href="/blog" class="hover:text-primary transition">Blog</a>
+      <a href="/contacto" class="hover:text-primary transition">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .dice-container {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+  }
+
+  .dice-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    scale: 0.9;
+    transition: opacity 0.4s ease-in-out, scale 0.4s ease-in-out;
+  }
+
+  .dice-face.active {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .dice-container.pulse {
+    animation: heartbeat 0.4s ease-in-out;
+  }
+
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .logo-text {
+    height: 150px;
+    width: auto;
+  }
+</style>
+
+<script>
+  const container = document.querySelector<HTMLDivElement>('.dice-container');
+  const faces = document.querySelectorAll<HTMLImageElement>('.dice-face');
+  let current = 0;
+
+  setInterval(() => {
+    // Quitar la cara actual
+    faces[current].classList.remove('active');
+
+    // Elegir una cara aleatoria distinta a la actual
+    let next;
+    do {
+      next = Math.floor(Math.random() * faces.length);
+    } while (next === current);
+    current = next;
+
+    // Activar la nueva cara
+    faces[current].classList.add('active');
+
+    // Latido del contenedor
+    container?.classList.remove('pulse');
+    // Forzar reflow para reiniciar la animación
+    void container?.offsetWidth;
+    container?.classList.add('pulse');
+  }, 1200);
+</script>

@@ -24,8 +24,14 @@ export async function getVideojuegosDestacados() {
   const { data } = await fetchStrapi("/videojuegos?filters[destacado][$eq]=true&populate=*");
 
   return data.map((item) => {
-    const { id, titulo, slug, descripcionCorta, destacado } = item;
-    return { id, titulo, slug, descripcionCorta, destacado };
+    const { id, titulo, slug, descripcionCorta, destacado, puntuacion, imagenPrincipal, generos } = item;
+    const imagen = imagenPrincipal?.url
+      ? `http://localhost:1337${imagenPrincipal.url}`
+      : null;
+    return {
+      id, titulo, slug, descripcionCorta, destacado, puntuacion, imagen,
+      generos: generos?.map(g => g.nombre) || [],
+    };
   });
 }
 
