@@ -599,8 +599,7 @@ export interface ApiVideojuegoVideojuego extends Struct.CollectionTypeSchema {
     generos: Schema.Attribute.Relation<'manyToMany', 'api::genero.genero'>;
     imagenPrincipal: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
-    > &
-      Schema.Attribute.Required;
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

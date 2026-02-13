@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const {
+    title,
+    description = "Plataforma profesional de reseñas de videojuegos",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <!-- Open Graph básico (mejor SEO + compartir) -->
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    </head>
+
+    <body class="bg-dark-primary relative overflow-x-hidden">
+        <!-- Píxeles decorativos -->
+        <div class="fixed inset-0 pointer-events-none opacity-40">
+            <!-- Esquina superior izquierda -->
+            <div
+                class="absolute top-0 left-0 w-96 h-96 bg-secondary blur-[120px] rounded-full"
+            >
+            </div>
+            <!-- Esquina inferior derecha -->
+            <div
+                class="absolute bottom-0 right-0 w-96 h-96 bg-primary blur-[120px] rounded-full"
+            >
+            </div>
+        </div>
+
+        <slot />
+    </body>
+</html>

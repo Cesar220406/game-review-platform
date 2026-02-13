@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getVideojuegosDestacados } from "../lib/api.js";
+
+const destacados = await getVideojuegosDestacados();
+---
+
+<Layout title="Game Review - Home">
+  <section class="hero">
+    <h1 class="text-primary">Tu claim aquí</h1>
+    <p>Subtítulo</p>
+    <a href="/videojuegos">Ver todas las reseñas</a>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 py-10">
+    <h2 class="text-3xl font-bold mb-6">Reseñas destacadas</h2>
+    <ul class="grid gap-4">
+      {destacados.map((v:any)=> {
+        const { titulo, slug } = v;
+        return (
+          <li class="p-4 rounded bg-dark-secondary">
+            <h3>{titulo}</h3>
+            <a href={`/videojuegos/${slug}`}>Leer más</a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+</Layout>
