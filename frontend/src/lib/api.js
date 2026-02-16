@@ -47,7 +47,7 @@ export async function getVideojuegos() {
       slug, 
       descripcionCorta, 
       destacado,
-      generos: generos?.map(g => g.slug) || [] // Solo slugs de géneros
+      generos: generos?.map(g => g.slug) || [] // SLUGS DE LOS GENEROS
     };
   });
 }

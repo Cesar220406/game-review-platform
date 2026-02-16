@@ -39,7 +39,7 @@ const {
   <body
     class="bg-dark-primary relative overflow-x-hidden text-text-primary min-h-screen flex flex-col"
   >
-    <!-- Píxeles decorativos -->
+    <!-- FONDO -->
     <div class="fixed inset-0 pointer-events-none opacity-40">
       <div
         class="absolute top-0 left-0 w-96 h-96 bg-secondary blur-[120px] rounded-full"
@@ -51,15 +51,15 @@ const {
       </div>
     </div>
 
-    <!-- Header global -->
+    <!-- HEADER -->
     <Header />
 
-    <!-- Contenido de cada página -->
+    <!-- CONTENIDO DE LAS PAGINAS -->
     <main class="flex-1 relative">
       <slot />
     </main>
 
-    <!-- Footer global -->
+    <!-- FOOTER -->
     <Footer />
   </body>
 </html>

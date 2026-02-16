@@ -1,13 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getVideojuegosDestacados } from "../lib/api.js";
+import { getGeneros } from "../lib/api.js";
+
+const generos = await getGeneros();
 
 const destacados = await getVideojuegosDestacados();
 ---
 
 <Layout title="Game Review - Home">
   <section class="relative overflow-hidden">
-    <!-- Imagen de fondo -->
+    <!-- IMAGEN FONDO HERO -->
     <div class="absolute inset-0">
       <img
         src="/img/imagenhero.webp"
@@ -17,10 +20,10 @@ const destacados = await getVideojuegosDestacados();
       <div class="absolute inset-0 bg-linear-to-r from-dark-primary via-dark-primary/90 to-dark-primary/40"></div>
     </div>
 
-    <!-- Contenido -->
+    <!--CONTENIDO -->
     <div class="relative max-w-7xl mx-auto px-4 py-24 md:py-36 lg:py-44">
       <div class="max-w-2xl flex flex-col gap-6">
-        <!-- Badge -->
+        <!-- ETIQUETA -->
         <span class="inline-flex items-center gap-2 bg-primary/15 text-primary border border-primary/30 rounded-full px-4 py-1.5 text-sm font-medium w-fit">
           <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
           Nueva temporada de reseñas
@@ -54,27 +57,13 @@ const destacados = await getVideojuegosDestacados();
           </a>
         </div>
 
-        <!-- Stats rápidas -->
-        <div class="flex gap-8 pt-6 border-t border-dark-tertiary/60 mt-2">
-          <div>
-            <span class="font-bungee text-2xl text-accent">150+</span>
-            <p class="text-text-muted text-sm">Reseñas</p>
-          </div>
-          <div>
-            <span class="font-bungee text-2xl text-accent">20+</span>
-            <p class="text-text-muted text-sm">Géneros</p>
-          </div>
-          <div>
-            <span class="font-bungee text-2xl text-accent">100%</span>
-            <p class="text-text-muted text-sm">Honestidad</p>
-          </div>
-        </div>
+    
       </div>
     </div>
   </section>
 
   <section class="max-w-7xl mx-auto px-4 py-16">
-    <!-- Encabezado de sección -->
+    <!-- ENCABEZADO -->
     <div class="flex items-center justify-between mb-10">
       <div>
         <h2 class="font-bungee text-3xl md:text-4xl text-text-primary uppercase">Reseñas destacadas</h2>
@@ -88,11 +77,10 @@ const destacados = await getVideojuegosDestacados();
       </a>
     </div>
 
-    <!-- Grid de cards -->
+    <!-- GRID -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {destacados.map((v: any) => (
         <a href={`/videojuegos/${v.slug}`} class="group bg-dark-secondary rounded-xl overflow-hidden border border-dark-tertiary/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
-          <!-- Imagen -->
           <div class="relative aspect-video overflow-hidden">
             {v.imagen ? (
               <img
@@ -107,7 +95,7 @@ const destacados = await getVideojuegosDestacados();
                 </svg>
               </div>
             )}
-            {/* Badge de puntuación */}
+            {/* PUNTUACION */}
             {v.puntuacion != null && (
               <div class={`absolute top-3 right-3 font-bungee text-sm px-3 py-1 rounded-lg backdrop-blur-sm ${
                 v.puntuacion >= 8 ? 'bg-green-500/90 text-white' :
@@ -119,9 +107,8 @@ const destacados = await getVideojuegosDestacados();
             )}
           </div>
 
-          <!-- Contenido -->
           <div class="p-5">
-            {/* Géneros */}
+            {/* GENEROS */}
             {v.generos.length > 0 && (
               <div class="flex flex-wrap gap-2 mb-3">
                 {v.generos.slice(0, 3).map((g: string) => (
@@ -149,7 +136,7 @@ const destacados = await getVideojuegosDestacados();
       ))}
     </div>
 
-    <!-- Link móvil -->
+    <!-- LINK -->
     <div class="mt-8 text-center md:hidden">
       <a href="/videojuegos" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition">
         Ver todas las reseñas
@@ -159,4 +146,28 @@ const destacados = await getVideojuegosDestacados();
       </a>
     </div>
   </section>
+  <section class="max-w-7xl mx-auto px-4 py-16">
+  <h2 class="text-3xl font-bold mb-8">Explora por género</h2>
+  
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    {generos.map((g: any) => {
+      const { nombre, slug } = g;
+      return (
+        <a 
+          href={`/videojuegos?genero=${slug}`}
+          class="relative h-40 rounded-lg overflow-hidden group hover:scale-105 transition"
+        >
+         <img 
+           src={`/generos/${slug}.webp`}
+           alt={nombre}
+           class="absolute inset-0 w-full h-full object-cover"
+/>
+          <div class="absolute inset-0 bg-linear-to-t from-dark-primary/90 to-transparent flex items-end justify-center p-4">
+            <h3 class="text-xl font-bold text-white">{nombre}</h3>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+</section>
 </Layout>
