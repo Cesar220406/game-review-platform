@@ -1,19 +1,39 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getVideojuegosDestacados } from "../lib/api.js";
-import { getGeneros } from "../lib/api.js";
+import { getVideojuegosDestacados, getGeneros, getHome } from "../lib/api.js";
 
 const generos = await getGeneros();
-
 const destacados = await getVideojuegosDestacados();
+const home = await getHome();
+
+// Desestructuración del contenido de home
+const {
+  heroEtiqueta,
+  heroTitulo,
+  heroTituloDestacado,
+  heroDescripcion,
+  heroBotonPrincipal,
+  heroBotonSecundario,
+  heroImagen,
+  seccionDestacadosTitulo,
+  seccionDestacadosSubtitulo,
+  seccionGenerosTitulo,
+  metaTitle,
+  metaDescription
+} = home;
+
+// URL de la imagen del hero
+const heroImagenUrl = heroImagen?.url
+  ? `http://46.225.167.247:1337${heroImagen.url}`
+  : '/img/imagenhero.webp';
 ---
 
-<Layout title="Game Review - Home">
+<Layout title={metaTitle} description={metaDescription}>
   <section class="relative overflow-hidden">
     <!-- IMAGEN FONDO HERO -->
     <div class="absolute inset-0">
       <img
-        src="/img/imagenhero.webp"
+        src={heroImagenUrl}
         alt=""
         class="w-full h-full object-cover"
       />
@@ -26,25 +46,21 @@ const destacados = await getVideojuegosDestacados();
         <!-- ETIQUETA -->
         <span class="inline-flex items-center gap-2 bg-primary/15 text-primary border border-primary/30 rounded-full px-4 py-1.5 text-sm font-medium w-fit">
           <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-          Nueva temporada de reseñas
+          {heroEtiqueta}
         </span>
 
         <h1 class="font-bungee text-4xl md:text-5xl lg:text-6xl text-text-primary uppercase leading-tight">
-          Reseñas críticas
-          <span class="text-secondary">sin filtro</span>
+          {heroTitulo}
+          <span class="text-secondary">{heroTituloDestacado}</span>
         </h1>
 
         <p class="text-lg md:text-xl text-text-secondary leading-relaxed max-w-lg">
-          Críticas honestas, puntuaciones detalladas y análisis sin relleno.
-          Solo lo que importa para decidir tu próxima partida.
+          {heroDescripcion}
         </p>
 
-        <div class="flex flex-wrap gap-4 pt-2">
-          <a
-            href="/videojuegos"
-            class="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/85 text-white font-bold px-7 py-3.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-secondary/25 hover:-translate-y-0.5"
-          >
-            Ver todas las reseñas
+        <div class="flex gap-4">
+          <a href="/videojuegos" class="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/85 text-white font-bold px-7 py-3.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-secondary/25 hover:-translate-y-0.5">
+            {heroBotonPrincipal}
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
             </svg>
@@ -53,11 +69,9 @@ const destacados = await getVideojuegosDestacados();
             href="/generos"
             class="inline-flex items-center gap-2 border border-text-muted/40 text-text-secondary hover:text-text-primary hover:border-text-secondary px-7 py-3.5 rounded-lg transition-all duration-200"
           >
-            Explorar géneros
+            {heroBotonSecundario}
           </a>
         </div>
-
-    
       </div>
     </div>
   </section>
@@ -66,8 +80,8 @@ const destacados = await getVideojuegosDestacados();
     <!-- ENCABEZADO -->
     <div class="flex items-center justify-between mb-10">
       <div>
-        <h2 class="font-bungee text-3xl md:text-4xl text-text-primary uppercase">Reseñas destacadas</h2>
-        <p class="text-text-muted mt-2">Los juegos que están dando de qué hablar</p>
+        <h2 class="font-bungee text-3xl md:text-4xl text-text-primary uppercase">{seccionDestacadosTitulo}</h2>
+        <p class="text-text-muted mt-2">{seccionDestacadosSubtitulo}</p>
       </div>
       <a href="/videojuegos" class="hidden md:inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition">
         Ver todas
@@ -77,10 +91,11 @@ const destacados = await getVideojuegosDestacados();
       </a>
     </div>
 
-    <!-- GRID -->
+    <!-- GRID DE DESTACADOS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {destacados.map((v: any) => (
-        <a href={`/videojuegos/${v.slug}`} class="group bg-dark-secondary rounded-xl overflow-hidden border border-dark-tertiary/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
+        <a href={`/videojuegos/${v.slug}`} class="group bg-dark-secondary rounded-xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 flex flex-col">
+          <!-- Imagen -->
           <div class="relative aspect-video overflow-hidden">
             {v.imagen ? (
               <img
@@ -89,54 +104,53 @@ const destacados = await getVideojuegosDestacados();
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             ) : (
-              <div class="w-full h-full bg-dark-tertiary flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              <div class="w-full h-full bg-dark-primary flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-text-muted/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
                 </svg>
               </div>
             )}
-            {/* PUNTUACION */}
+            <!-- Puntuación -->
             {v.puntuacion != null && (
-              <div class={`absolute top-3 right-3 font-bungee text-sm px-3 py-1 rounded-lg backdrop-blur-sm ${
-                v.puntuacion >= 8 ? 'bg-green-500/90 text-white' :
-                v.puntuacion >= 5 ? 'bg-accent/90 text-dark-primary' :
-                'bg-red-500/90 text-white'
-              }`}>
-                {v.puntuacion.toFixed(1)}
+              <div class="absolute top-3 right-3 bg-dark-primary/80 backdrop-blur-sm border border-white/10 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-secondary" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span class="text-sm font-bold text-text-primary">{v.puntuacion}<span class="text-text-muted font-normal">/10</span></span>
               </div>
             )}
           </div>
 
-          <div class="p-5">
-            {/* GENEROS */}
+          <!-- Contenido -->
+          <div class="p-5 flex flex-col gap-3 flex-1">
+            <!-- Géneros -->
             {v.generos.length > 0 && (
-              <div class="flex flex-wrap gap-2 mb-3">
+              <div class="flex flex-wrap gap-1.5">
                 {v.generos.slice(0, 3).map((g: string) => (
-                  <span class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">{g}</span>
+                  <span class="text-xs bg-primary/10 text-primary border border-primary/20 rounded-full px-2.5 py-0.5">{g}</span>
                 ))}
               </div>
             )}
 
-            <h3 class="font-bungee text-lg text-text-primary group-hover:text-primary transition-colors uppercase leading-tight">
+            <h3 class="font-bungee text-lg text-text-primary uppercase group-hover:text-primary transition-colors leading-tight">
               {v.titulo}
             </h3>
 
             {v.descripcionCorta && (
-              <p class="text-text-muted text-sm mt-2 line-clamp-2">{v.descripcionCorta}</p>
+              <p class="text-sm text-text-muted leading-relaxed line-clamp-2 flex-1">{v.descripcionCorta}</p>
             )}
 
-            <div class="flex items-center gap-2 mt-4 text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+            <span class="inline-flex items-center gap-1.5 text-sm text-primary font-medium mt-auto pt-1">
               Leer reseña
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
               </svg>
-            </div>
+            </span>
           </div>
         </a>
       ))}
     </div>
 
-    <!-- LINK -->
     <div class="mt-8 text-center md:hidden">
       <a href="/videojuegos" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition">
         Ver todas las reseñas
@@ -146,28 +160,29 @@ const destacados = await getVideojuegosDestacados();
       </a>
     </div>
   </section>
+
   <section class="max-w-7xl mx-auto px-4 py-16">
-  <h2 class="text-3xl font-bold mb-8">Explora por género</h2>
-  
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-    {generos.map((g: any) => {
-      const { nombre, slug } = g;
-      return (
-        <a 
-          href={`/videojuegos?genero=${slug}`}
-          class="relative h-40 rounded-lg overflow-hidden group hover:scale-105 transition"
-        >
-         <img 
-           src={`/generos/${slug}.webp`}
-           alt={nombre}
-           class="absolute inset-0 w-full h-full object-cover"
-/>
-          <div class="absolute inset-0 bg-linear-to-t from-dark-primary/90 to-transparent flex items-end justify-center p-4">
-            <h3 class="text-xl font-bold text-white">{nombre}</h3>
-          </div>
-        </a>
-      );
-    })}
-  </div>
-</section>
+    <h2 class="text-3xl font-bold mb-8">{seccionGenerosTitulo}</h2>
+    
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {generos.map((g: any) => {
+        const { nombre, slug } = g;
+        return (
+          <a 
+            href={`/videojuegos?genero=${slug}`}
+            class="relative h-40 rounded-lg overflow-hidden group hover:scale-105 transition"
+          >
+            <img 
+              src={`/generos/${slug}.webp`}
+              alt={nombre}
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-linear-to-t from-dark-primary/90 to-transparent flex items-end justify-center p-4">
+              <h3 class="text-xl font-bold text-white">{nombre}</h3>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
 </Layout>

@@ -1,5 +1,4 @@
-const API_URL = "http://localhost:1337/api";
-
+const API_URL = "http://46.225.167.247:1337/api";
 /**
  * @typedef {Object} Videojuego
  * @property {number} id
@@ -26,7 +25,7 @@ export async function getVideojuegosDestacados() {
   return data.map((item) => {
     const { id, titulo, slug, descripcionCorta, destacado, puntuacion, imagenPrincipal, generos } = item;
     const imagen = imagenPrincipal?.url
-      ? `http://localhost:1337${imagenPrincipal.url}`
+      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
       : null;
     return {
       id, titulo, slug, descripcionCorta, destacado, puntuacion, imagen,
@@ -55,4 +54,23 @@ export async function getVideojuegos() {
 export async function getGeneros() {
   const { data } = await fetchStrapi("/generos");
   return data.map(({ id, nombre, slug }) => ({ id, nombre, slug }));
+}
+
+// Función para obtener contenido de la home
+export async function getHome() {
+  try {
+    const response = await fetch(
+      `${API_URL}/home?populate=heroImagen`
+    );
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener contenido de home');
+    }
+    
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error('Error en getHome:', error);
+    throw error;
+  }
 }
