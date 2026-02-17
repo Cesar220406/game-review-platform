@@ -100,10 +100,13 @@ export async function getVideojuegoPorSlug(slug) {
   }
 }
 export async function getArticulos() {
-  const { data } = await fetchStrapi("/articulos?sort=fechaPublicacion:desc");
+  const { data } = await fetchStrapi("/articulos?sort=fechaPublicacion:desc&populate=*");
   return data.map((item) => {
     const { id, titulo, slug, extracto, fechaPublicacion, imagenDestacada, metaTitle, metaDescription } = item;
-    return { id, titulo, slug, extracto, fechaPublicacion, imagenDestacada, metaTitle, metaDescription };
+    const imagen = imagenDestacada?.url
+      ? `http://46.225.167.247:1337${imagenDestacada.url}`
+      : null;
+    return { id, titulo, slug, extracto, fechaPublicacion, imagen, metaTitle, metaDescription };
   });
 }
 
