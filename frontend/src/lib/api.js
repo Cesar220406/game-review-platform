@@ -99,3 +99,22 @@ export async function getVideojuegoPorSlug(slug) {
     return null;
   }
 }
+export async function getArticulos() {
+  const { data } = await fetchStrapi("/articulos?sort=fechaPublicacion:desc");
+  return data.map((item) => {
+    const { id, titulo, slug, extracto, fechaPublicacion, imagenDestacada, metaTitle, metaDescription } = item;
+    return { id, titulo, slug, extracto, fechaPublicacion, imagenDestacada, metaTitle, metaDescription };
+  });
+}
+
+export async function getArticuloPorSlug(slug) {
+  try {
+    const res = await fetch(`${API_URL}/articulos?filters[slug][$eq]=${slug}&populate=*`);
+    if (!res.ok) throw new Error("Error al obtener el artículo");
+    const { data } = await res.json();
+    return data[0] ?? null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
