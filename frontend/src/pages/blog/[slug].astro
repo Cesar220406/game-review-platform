@@ -1,0 +1,103 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getArticuloPorSlug } from "../../lib/api.js";
+import { marked } from "marked";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const articulo = await getArticuloPorSlug(slug);
+
+if (!articulo) {
+  return Astro.redirect("/404");
+}
+
+const {
+  titulo,
+  extracto,
+  contenido,
+  fechaPublicacion,
+  autor,
+  imagenDestacada,
+  metaTitle,
+  metaDescription,
+} = articulo;
+
+const contenidoHtml = contenido ? marked(contenido) : null;
+const imagenUrl = imagenDestacada?.url
+  ? `http://46.225.167.247:1337${imagenDestacada.url}`
+  : null;
+---
+
+<Layout title={metaTitle ?? titulo} description={metaDescription ?? extracto}>
+  <article class="max-w-4xl mx-auto px-4 py-16">
+
+    <!-- VOLVER -->
+    <div class="mb-10">
+      <a href="/blog" class="inline-flex items-center gap-2 text-text-muted hover:text-primary transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+        </svg>
+        Volver al blog
+      </a>
+    </div>
+
+    <!-- CABECERA -->
+    <header class="mb-10">
+      <time class="text-primary text-sm font-semibold uppercase tracking-widest" datetime={fechaPublicacion}>
+        {new Date(fechaPublicacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </time>
+      <h1 class="font-bungee text-3xl md:text-5xl text-text-primary uppercase leading-tight mt-3 mb-4">
+        {titulo}
+      </h1>
+      {extracto && (
+        <p class="text-text-secondary text-lg md:text-xl leading-relaxed">{extracto}</p>
+      )}
+      {autor && (
+        <p class="text-text-muted text-sm mt-4">
+          Por <span class="text-text-secondary font-medium">{autor}</span>
+        </p>
+      )}
+    </header>
+
+    <!-- IMAGEN DESTACADA -->
+    {imagenUrl && (
+      <div class="rounded-2xl overflow-hidden border border-white/5 mb-12">
+        <img
+          src={imagenUrl}
+          alt={titulo}
+          class="w-full h-auto object-cover"
+        />
+      </div>
+    )}
+
+    <!-- CONTENIDO -->
+    {contenidoHtml ? (
+      <div
+        class="prose prose-invert prose-lg max-w-none
+               prose-headings:font-bungee prose-headings:uppercase prose-headings:text-text-primary
+               prose-p:text-text-secondary prose-p:leading-relaxed
+               prose-a:text-primary hover:prose-a:text-primary/80
+               prose-strong:text-text-primary
+               prose-blockquote:border-primary/40 prose-blockquote:text-text-muted
+               prose-img:rounded-xl prose-img:border prose-img:border-white/5"
+        set:html={contenidoHtml}
+      />
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-text-muted">Este artículo aún no tiene contenido.</p>
+      </div>
+    )}
+
+    <!-- VOLVER (PIE) -->
+    <div class="mt-16 pt-8 border-t border-white/5">
+      <a href="/blog" class="inline-flex items-center gap-2 text-text-muted hover:text-primary transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+        </svg>
+        Volver al blog
+      </a>
+    </div>
+
+  </article>
+</Layout>
