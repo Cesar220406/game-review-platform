@@ -74,3 +74,28 @@ export async function getHome() {
     throw error;
   }
 }
+
+export async function getPlatforms() {
+  try {
+    const res = await fetch(`${API_URL}/plataformas`);
+    if (!res.ok) throw new Error("Error al obtener plataformas");
+    const { data } = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+export async function getVideojuegoPorSlug(slug) {
+  try {
+    const res = await fetch(
+      `${API_URL}/videojuegos?filters[slug][$eq]=${slug}&populate=*`
+    );
+    if (!res.ok) throw new Error("Error al obtener el videojuego");
+    const { data } = await res.json();
+    return data[0] ?? null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

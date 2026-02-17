@@ -1,0 +1,67 @@
+{
+  "kind": "singleType",
+  "collectionName": "homes",
+  "info": {
+    "singularName": "home",
+    "pluralName": "homes",
+    "displayName": "home"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroEtiqueta": {
+      "type": "string"
+    },
+    "heroTitulo": {
+      "type": "string"
+    },
+    "heroTituloDestacado": {
+      "type": "string"
+    },
+    "heroDescripcion": {
+      "type": "text"
+    },
+    "heroBotonPrincipal": {
+      "type": "string"
+    },
+    "heroBotonSecundario": {
+      "type": "string"
+    },
+    "heroImagen": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "seccionDestacadosTitulo": {
+      "type": "string"
+    },
+    "seccionDestacadosSubtitulo": {
+      "type": "string"
+    },
+    "seccionGenerosTitulo": {
+      "type": "string"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    },
+    "plataformas_titulo": {
+      "type": "string"
+    },
+    "plataformas_subtitulo": {
+      "type": "string"
+    },
+    "plataformas_cta": {
+      "type": "string"
+    }
+  }
+}

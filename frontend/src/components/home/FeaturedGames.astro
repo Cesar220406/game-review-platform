@@ -1,0 +1,47 @@
+---
+import GameCard from "../shared/GameCard.astro";
+
+interface Props {
+  titulo: string;
+  subtitulo: string;
+  games: any[];
+}
+
+const { titulo, subtitulo, games } = Astro.props;
+---
+<section class="max-w-7xl mx-auto px-4 py-16">
+  <div class="flex items-center justify-between mb-10">
+    <div>
+      <h2 class="font-bungee text-3xl md:text-4xl text-text-primary uppercase">{titulo}</h2>
+      <p class="text-text-muted mt-2">{subtitulo}</p>
+    </div>
+    <a href="/videojuegos" class="hidden md:inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition">
+      Ver todas
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {games.map(({ titulo, slug, imagen, puntuacion, generos, descripcionCorta }) => (
+      <GameCard
+        titulo={titulo}
+        slug={slug}
+        imagen={imagen}
+        puntuacion={puntuacion}
+        generos={generos}
+        descripcionCorta={descripcionCorta}
+      />
+    ))}
+  </div>
+
+  <div class="mt-8 text-center md:hidden">
+    <a href="/videojuegos" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition">
+      Ver todas las reseñas
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+</section>

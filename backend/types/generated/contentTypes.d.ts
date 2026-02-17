@@ -537,6 +537,47 @@ export interface ApiGeneroGenero extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHomeHome extends Struct.SingleTypeSchema {
+  collectionName: 'homes';
+  info: {
+    displayName: 'home';
+    pluralName: 'homes';
+    singularName: 'home';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroBotonPrincipal: Schema.Attribute.String;
+    heroBotonSecundario: Schema.Attribute.String;
+    heroDescripcion: Schema.Attribute.Text;
+    heroEtiqueta: Schema.Attribute.String;
+    heroImagen: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    heroTitulo: Schema.Attribute.String;
+    heroTituloDestacado: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::home.home'> &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.String;
+    metaTitle: Schema.Attribute.String;
+    plataformas_cta: Schema.Attribute.String;
+    plataformas_subtitulo: Schema.Attribute.String;
+    plataformas_titulo: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seccionDestacadosSubtitulo: Schema.Attribute.String;
+    seccionDestacadosTitulo: Schema.Attribute.String;
+    seccionGenerosTitulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPlataformaPlataforma extends Struct.CollectionTypeSchema {
   collectionName: 'plataformas';
   info: {
@@ -1138,6 +1179,7 @@ declare module '@strapi/strapi' {
       'api::articulo.articulo': ApiArticuloArticulo;
       'api::contacto.contacto': ApiContactoContacto;
       'api::genero.genero': ApiGeneroGenero;
+      'api::home.home': ApiHomeHome;
       'api::plataforma.plataforma': ApiPlataformaPlataforma;
       'api::videojuego.videojuego': ApiVideojuegoVideojuego;
       'plugin::content-releases.release': PluginContentReleasesRelease;

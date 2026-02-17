@@ -1,0 +1,264 @@
+{
+  "generos": [
+    {
+      "nombre": "Acción",
+      "slug": "accion",
+      "descripcion": "Juegos centrados en la habilidad del jugador, reflejos y combate en tiempo real."
+    },
+    {
+      "nombre": "Aventura",
+      "slug": "aventura",
+      "descripcion": "Experiencias narrativas con exploración, puzzles y desarrollo de historia."
+    },
+    {
+      "nombre": "RPG",
+      "slug": "rpg",
+      "descripcion": "Juegos de rol con progresión de personaje, estadísticas y decisiones narrativas."
+    },
+    {
+      "nombre": "Estrategia",
+      "slug": "estrategia",
+      "descripcion": "Juegos que requieren planificación táctica y gestión de recursos."
+    },
+    {
+      "nombre": "Plataformas",
+      "slug": "plataformas",
+      "descripcion": "Juegos basados en saltos, movimiento preciso y recorrido de niveles."
+    },
+    {
+      "nombre": "Shooter",
+      "slug": "shooter",
+      "descripcion": "Juegos de disparos en primera o tercera persona con acción frenética."
+    },
+    {
+      "nombre": "Survival Horror",
+      "slug": "survival-horror",
+      "descripcion": "Experiencias de terror centradas en la supervivencia y la tensión atmosférica."
+    },
+    {
+      "nombre": "Indie",
+      "slug": "indie",
+      "descripcion": "Títulos desarrollados por estudios independientes con propuestas creativas únicas."
+    }
+  ],
+  "plataformas": [
+    { "nombre": "PlayStation 5", "slug": "ps5" },
+    { "nombre": "Xbox Series X|S", "slug": "xbox-series" },
+    { "nombre": "Nintendo Switch", "slug": "nintendo-switch" },
+    { "nombre": "PC", "slug": "pc" },
+    { "nombre": "PlayStation 4", "slug": "ps4" },
+    { "nombre": "Steam Deck", "slug": "steam-deck" }
+  ],
+  "videojuegos": [
+    {
+      "titulo": "Elden Ring",
+      "slug": "elden-ring",
+      "descripcionCorta": "Un RPG de acción en mundo abierto creado por FromSoftware y George R.R. Martin que redefine el género soulslike.",
+      "descripcionCompleta": "## Un mundo abierto sin precedentes\n\nElden Ring representa la culminación de la filosofía de diseño de FromSoftware. Las Tierras Intermedias ofrecen un vasto mundo interconectado donde cada rincón esconde secretos, desafíos y una narrativa fragmentada que invita a la interpretación.\n\n## Combate refinado\n\nEl sistema de combate hereda lo mejor de Dark Souls y Sekiro, añadiendo mecánicas como las cenizas de guerra y la invocación de espíritus. La libertad para construir tu personaje es prácticamente infinita.\n\n## Legado y comunidad\n\nCon más de 25 millones de copias vendidas, Elden Ring ha consolidado el género soulslike como una de las corrientes más influyentes del gaming moderno. Su DLC Shadow of the Erdtree amplió aún más esta experiencia magistral.",
+      "fechaLanzamiento": "2022-02-25",
+      "desarrolladora": "FromSoftware",
+      "puntuacion": 97,
+      "metaTitle": "Elden Ring - Reseña completa | Pixelcrit",
+      "metaDescription": "Análisis en profundidad de Elden Ring, el RPG de acción en mundo abierto de FromSoftware. Descubre por qué es una obra maestra del género.",
+      "destacado": true,
+      "generos": ["RPG", "Acción"],
+      "plataformas": ["PlayStation 5", "Xbox Series X|S", "PC", "PlayStation 4"]
+    },
+    {
+      "titulo": "The Legend of Zelda: Tears of the Kingdom",
+      "slug": "zelda-tears-of-the-kingdom",
+      "descripcionCorta": "La secuela de Breath of the Wild lleva la exploración y la creatividad a nuevas alturas con sus mecánicas de construcción.",
+      "descripcionCompleta": "## Reinventando la fórmula\n\nTears of the Kingdom toma la base excepcional de Breath of the Wild y la expande en todas las direcciones posibles. Las nuevas habilidades de Link, especialmente Ultrahand y Fuse, transforman Hyrule en un sandbox de posibilidades infinitas.\n\n## Verticalidad y exploración\n\nLas islas celestiales y las profundidades subterráneas triplican el espacio explorable. Cada zona presenta puzzles ambientales que premian la experimentación y el pensamiento lateral.\n\n## Ingeniería creativa\n\nLa comunidad ha demostrado que los límites del juego están definidos únicamente por la imaginación del jugador. Desde vehículos voladores hasta máquinas de combate automatizadas, las posibilidades de construcción son asombrosas.",
+      "fechaLanzamiento": "2023-05-12",
+      "desarrolladora": "Nintendo EPD",
+      "puntuacion": 96,
+      "metaTitle": "Zelda: Tears of the Kingdom - Análisis | Pixelcrit",
+      "metaDescription": "Reseña completa de The Legend of Zelda: Tears of the Kingdom para Nintendo Switch. Creatividad y exploración sin límites.",
+      "destacado": true,
+      "generos": ["Aventura", "Acción"],
+      "plataformas": ["Nintendo Switch"]
+    },
+    {
+      "titulo": "Baldur's Gate 3",
+      "slug": "baldurs-gate-3",
+      "descripcionCorta": "Larian Studios entrega el RPG definitivo con una libertad narrativa sin precedentes basada en Dungeons & Dragons.",
+      "descripcionCompleta": "## El RPG de una generación\n\nBaldur's Gate 3 es una carta de amor al rol de mesa. Cada decisión tiene consecuencias reales, cada personaje tiene profundidad genuina y cada partida se siente verdaderamente única.\n\n## Libertad narrativa total\n\nEl juego ofrece una cantidad abrumadora de caminos narrativos. Los compañeros reaccionan de forma orgánica a tus decisiones, las misiones tienen múltiples resoluciones y el mundo se transforma según tus acciones.\n\n## Combate táctico brillante\n\nEl sistema por turnos basado en D&D 5e ofrece una profundidad estratégica excepcional. El uso del entorno, las sinergias entre clases y los hechizos creativos hacen que cada encuentro sea memorable.",
+      "fechaLanzamiento": "2023-08-03",
+      "desarrolladora": "Larian Studios",
+      "puntuacion": 96,
+      "metaTitle": "Baldur's Gate 3 - Reseña definitiva | Pixelcrit",
+      "metaDescription": "Análisis completo de Baldur's Gate 3, el RPG basado en D&D de Larian Studios. Libertad, narrativa y combate táctico al más alto nivel.",
+      "destacado": true,
+      "generos": ["RPG", "Estrategia"],
+      "plataformas": ["PC", "PlayStation 5", "Xbox Series X|S"]
+    },
+    {
+      "titulo": "God of War Ragnarök",
+      "slug": "god-of-war-ragnarok",
+      "descripcionCorta": "Kratos y Atreus se enfrentan al Ragnarök en una épica aventura que cierra la saga nórdica con maestría.",
+      "descripcionCompleta": "## El cierre perfecto\n\nRagnarök concluye la saga nórdica de God of War con una narrativa emotiva y madura. La relación entre Kratos y Atreus alcanza nuevas cotas de profundidad emocional.\n\n## Combate evolucionado\n\nEl sistema de combate amplía las posibilidades del título anterior con nuevas armas, habilidades y enemigos que exigen dominar todas las herramientas disponibles.\n\n## Los Nueve Reinos\n\nLa exploración se expande a los nueve reinos de la mitología nórdica, cada uno con identidad visual propia, secretos por descubrir y desafíos opcionales que extienden enormemente la experiencia.",
+      "fechaLanzamiento": "2022-11-09",
+      "desarrolladora": "Santa Monica Studio",
+      "puntuacion": 94,
+      "metaTitle": "God of War Ragnarök - Análisis completo | Pixelcrit",
+      "metaDescription": "Reseña de God of War Ragnarök. Descubre cómo Santa Monica Studio cierra la saga nórdica de Kratos con una aventura épica.",
+      "destacado": false,
+      "generos": ["Acción", "Aventura"],
+      "plataformas": ["PlayStation 5", "PlayStation 4", "PC"]
+    },
+    {
+      "titulo": "Hollow Knight: Silksong",
+      "slug": "hollow-knight-silksong",
+      "descripcionCorta": "La esperada secuela del metroidvania indie más aclamado pone a Hornet como protagonista en un nuevo reino.",
+      "descripcionCompleta": "## El regreso más esperado\n\nSilksong toma todo lo que hizo grande a Hollow Knight y lo eleva. Hornet ofrece un estilo de juego más ágil y vertical que complementa perfectamente el diseño de niveles.\n\n## Pharloom\n\nEl nuevo reino es una maravilla de diseño artístico. Cada zona tiene personalidad propia con enemigos, mecánicas y secretos únicos que invitan a la exploración meticulosa.\n\n## Precisión indie\n\nTeam Cherry demuestra una vez más que un estudio pequeño puede crear experiencias que rivalizan con los grandes presupuestos. El nivel de pulido en animaciones, controles y diseño de jefes es extraordinario.",
+      "fechaLanzamiento": "2025-06-15",
+      "desarrolladora": "Team Cherry",
+      "puntuacion": 92,
+      "metaTitle": "Hollow Knight: Silksong - Análisis | Pixelcrit",
+      "metaDescription": "Reseña de Hollow Knight: Silksong, la secuela del metroidvania de Team Cherry. Hornet protagoniza una aventura imprescindible.",
+      "destacado": true,
+      "generos": ["Plataformas", "Indie", "Aventura"],
+      "plataformas": ["Nintendo Switch", "PC"]
+    },
+    {
+      "titulo": "Resident Evil 4 Remake",
+      "slug": "resident-evil-4-remake",
+      "descripcionCorta": "Capcom reimagina el clásico de 2005 con gráficos de nueva generación y un gameplay modernizado sin perder su esencia.",
+      "descripcionCompleta": "## Reimaginación magistral\n\nResident Evil 4 Remake demuestra cómo actualizar un clásico respetando su esencia. Capcom ha modernizado controles, gráficos y diseño de niveles sin sacrificar lo que hizo especial al original.\n\n## Terror y acción equilibrados\n\nEl balance entre momentos de tensión y acción frenética está perfectamente calibrado. Los enemigos son más inteligentes y agresivos, obligando al jugador a gestionar recursos con cuidado.\n\n## El pueblo, el castillo, la isla\n\nLos tres actos del juego ofrecen experiencias distintas pero cohesionadas. Cada localización ha sido reimaginada con un nivel de detalle que aprovecha al máximo el RE Engine de Capcom.",
+      "fechaLanzamiento": "2023-03-24",
+      "desarrolladora": "Capcom",
+      "puntuacion": 93,
+      "metaTitle": "Resident Evil 4 Remake - Análisis | Pixelcrit",
+      "metaDescription": "Análisis de Resident Evil 4 Remake. Capcom reinventa el clásico del survival horror con resultados espectaculares.",
+      "destacado": false,
+      "generos": ["Survival Horror", "Acción", "Shooter"],
+      "plataformas": ["PlayStation 5", "Xbox Series X|S", "PC", "PlayStation 4"]
+    },
+    {
+      "titulo": "Hades II",
+      "slug": "hades-ii",
+      "descripcionCorta": "Supergiant Games vuelve al inframundo con Melinoë en un roguelike que supera a su ya brillante predecesor.",
+      "descripcionCompleta": "## Superando lo insuperable\n\nHades II toma la fórmula ganadora del original y la expande en todas las direcciones. Melinoë ofrece un estilo de juego distinto a Zagreo, con magia y conjuros que añaden profundidad estratégica.\n\n## Narrativa emergente\n\nComo su predecesor, la historia se desarrolla orgánicamente a través de las runs. Los diálogos son brillantes, los personajes memorables y las relaciones evolucionan de forma natural.\n\n## Estilo visual inconfundible\n\nEl arte de Supergiant Games sigue siendo de los mejores de la industria. Cada bioma, cada enemigo y cada habilidad está diseñado con un cuidado artístico excepcional.",
+      "fechaLanzamiento": "2024-05-06",
+      "desarrolladora": "Supergiant Games",
+      "puntuacion": 93,
+      "metaTitle": "Hades II - Reseña completa | Pixelcrit",
+      "metaDescription": "Análisis de Hades II, el nuevo roguelike de Supergiant Games. Melinoë protagoniza una secuela que supera al brillante original.",
+      "destacado": false,
+      "generos": ["Acción", "Indie", "RPG"],
+      "plataformas": ["PC", "PlayStation 5", "Xbox Series X|S"]
+    },
+    {
+      "titulo": "Astro Bot",
+      "slug": "astro-bot",
+      "descripcionCorta": "Team Asobi crea el mejor plataformas 3D en años con un homenaje a la historia de PlayStation lleno de creatividad.",
+      "descripcionCompleta": "## La joya de PlayStation\n\nAstro Bot es una celebración pura del videojuego como medio. Cada nivel introduce mecánicas nuevas con una creatividad desbordante que no da tregua.\n\n## Diseño de niveles magistral\n\nCada mundo es una caja de sorpresas. Team Asobi exprime al máximo el DualSense de PS5 con feedback háptico y gatillos adaptativos que transforman cada interacción en algo mágico.\n\n## Homenaje y futuro\n\nMientras celebra el legado de PlayStation con cameos y referencias, Astro Bot también mira hacia el futuro del género de plataformas con ideas frescas y una ejecución impecable.",
+      "fechaLanzamiento": "2024-09-06",
+      "desarrolladora": "Team Asobi",
+      "puntuacion": 94,
+      "metaTitle": "Astro Bot - Análisis | Pixelcrit",
+      "metaDescription": "Reseña de Astro Bot para PS5. El mejor plataformas 3D en años y una carta de amor al mundo del videojuego.",
+      "destacado": true,
+      "generos": ["Plataformas", "Aventura"],
+      "plataformas": ["PlayStation 5"]
+    },
+    {
+      "titulo": "Cyberpunk 2077: Ultimate Edition",
+      "slug": "cyberpunk-2077-ultimate",
+      "descripcionCorta": "Tras años de mejoras, Cyberpunk 2077 se convierte finalmente en el RPG futurista que prometió ser.",
+      "descripcionCompleta": "## La redención de Night City\n\nCyberpunk 2077 tuvo un lanzamiento problemático, pero CD Projekt RED ha demostrado un compromiso admirable con su visión. La versión Ultimate Edition es el juego que debió ser desde el principio.\n\n## Night City reimaginada\n\nLa ciudad es un personaje más. Cada barrio tiene identidad propia, las misiones secundarias rivalizan en calidad con la historia principal y los personajes como Judy, Panam y Johnny Silverhand son inolvidables.\n\n## Phantom Liberty\n\nLa expansión Phantom Liberty eleva el juego a nuevas cotas con una trama de espionaje, nuevas mecánicas de combate y un distrito completamente nuevo que es posiblemente la mejor zona del juego.",
+      "fechaLanzamiento": "2023-12-05",
+      "desarrolladora": "CD Projekt RED",
+      "puntuacion": 89,
+      "metaTitle": "Cyberpunk 2077 Ultimate Edition - Análisis | Pixelcrit",
+      "metaDescription": "Reseña de Cyberpunk 2077 Ultimate Edition. La redención de CD Projekt RED con Night City en su mejor versión.",
+      "destacado": false,
+      "generos": ["RPG", "Acción", "Shooter"],
+      "plataformas": ["PC", "PlayStation 5", "Xbox Series X|S"]
+    },
+    {
+      "titulo": "Celeste",
+      "slug": "celeste",
+      "descripcionCorta": "Un plataformas de precisión que combina un desafío exigente con una historia emotiva sobre salud mental.",
+      "descripcionCompleta": "## Más que un plataformas\n\nCeleste trasciende su género con una narrativa sincera sobre la ansiedad y la superación personal. Madeline y su ascenso al Monte Celeste son una metáfora poderosa y conmovedora.\n\n## Precisión perfecta\n\nLos controles son absolutamente impecables. Cada muerte se siente justa y cada superación genuinamente satisfactoria. El dash es una de las mecánicas mejor diseñadas de la historia del género.\n\n## Accesibilidad sin compromiso\n\nEl modo asistido permite que cualquier jugador experimente la historia sin reducir el mérito de completar los desafíos en su dificultad original. Un ejemplo de diseño inclusivo.",
+      "fechaLanzamiento": "2018-01-25",
+      "desarrolladora": "Maddy Makes Games",
+      "puntuacion": 91,
+      "metaTitle": "Celeste - Análisis retrospectivo | Pixelcrit",
+      "metaDescription": "Reseña de Celeste, el plataformas indie que combina desafío extremo con una historia emotiva sobre la superación personal.",
+      "destacado": false,
+      "generos": ["Plataformas", "Indie"],
+      "plataformas": ["Nintendo Switch", "PC", "PlayStation 4", "Xbox Series X|S"]
+    }
+  ],
+  "articulos": [
+    {
+      "titulo": "El auge del género soulslike: de nicho a mainstream",
+      "slug": "auge-genero-soulslike",
+      "extracto": "Cómo los juegos de FromSoftware han transformado la industria y creado un género que domina el panorama actual.",
+      "contenido": "## De Demon's Souls a Elden Ring\n\nEl viaje del género soulslike desde un nicho de jugadores hardcore hasta el mainstream absoluto es una de las historias más fascinantes del gaming moderno.\n\nCuando FromSoftware lanzó Demon's Souls en 2009, pocos anticipaban que estaban presenciando el nacimiento de un nuevo género. La dificultad implacable y el diseño críptico parecían condenarlo a un público reducido.\n\n## La fórmula que cambió todo\n\nDark Souls refinó la propuesta con un mundo interconectado brillante y un sistema de mensajes entre jugadores que creó una comunidad única. La famosa frase \"You Died\" se convirtió en un icono cultural.\n\n## El efecto dominó en la industria\n\nHoy vemos influencias soulslike en títulos de todo tipo. Desde Star Wars Jedi hasta Lies of P, la filosofía de diseño de Miyazaki ha permeado cada rincón de la industria del desarrollo.",
+      "fechaPublicacion": "2025-01-15T10:00:00.000Z",
+      "metaTitle": "El auge del género soulslike | Blog Pixelcrit",
+      "metaDescription": "Exploramos cómo los juegos de FromSoftware transformaron un nicho en el género más influyente del gaming actual."
+    },
+    {
+      "titulo": "Los 5 mejores RPGs que deberías jugar en 2025",
+      "slug": "mejores-rpgs-2025",
+      "extracto": "Nuestra selección de los RPGs imprescindibles que todo amante del género debería tener en su radar este año.",
+      "contenido": "## Un año dorado para el rol\n\n2025 se perfila como un año excepcional para los amantes del RPG. Con lanzamientos de peso y joyas independientes, la variedad es abrumadora.\n\n## La evolución del género\n\nEl RPG moderno ya no se limita a turnos y menús. Títulos como Baldur's Gate 3 han demostrado que la profundidad narrativa puede coexistir con sistemas de combate accesibles y cinematográficos.\n\n## Más allá de los AAA\n\nEl panorama indie ofrece propuestas fascinantes que exploran mecánicas de rol desde ángulos inesperados. Juegos con presupuestos modestos pero ideas revolucionarias que desafían las convenciones del género.\n\n## La importancia de la elección\n\nLo que define a un gran RPG en 2025 es la sensación de agencia. Los jugadores quieren que sus decisiones importen, que el mundo reaccione y que cada partida cuente una historia diferente.",
+      "fechaPublicacion": "2025-02-01T09:00:00.000Z",
+      "metaTitle": "Los 5 mejores RPGs de 2025 | Blog Pixelcrit",
+      "metaDescription": "Descubre los RPGs imprescindibles de 2025. Nuestra selección de los juegos de rol que no puedes perderte este año."
+    },
+    {
+      "titulo": "¿Por qué los juegos indie dominan los premios?",
+      "slug": "juegos-indie-dominan-premios",
+      "extracto": "Analizamos el fenómeno de los estudios independientes que compiten de tú a tú con las grandes producciones.",
+      "contenido": "## David contra Goliat\n\nEn los últimos años hemos visto cómo títulos independientes se llevan los premios más prestigiosos de la industria. Hades, Celeste, Disco Elysium... la lista no para de crecer.\n\n## Creatividad sin restricciones\n\nLos estudios indie tienen la libertad de experimentar sin la presión de los accionistas. Esto les permite tomar riesgos creativos que los grandes publishers rara vez se atreven a asumir.\n\n## El factor pasión\n\nDetrás de cada gran juego indie hay un equipo pequeño con una visión clara y la determinación de hacerla realidad. Esa pasión se transmite en cada pixel, cada línea de diálogo y cada mecánica.\n\n## El futuro es indie\n\nCon herramientas de desarrollo cada vez más accesibles y plataformas de distribución digital democratizadas, el futuro del gaming independiente es más brillante que nunca.",
+      "fechaPublicacion": "2025-02-10T11:00:00.000Z",
+      "metaTitle": "Los juegos indie dominan los premios | Blog Pixelcrit",
+      "metaDescription": "Analizamos por qué los estudios independientes están ganando los premios más importantes de la industria del videojuego."
+    },
+    {
+      "titulo": "Guía de compra: ¿PC o consola en 2025?",
+      "slug": "guia-compra-pc-consola-2025",
+      "extracto": "Te ayudamos a decidir cuál es la mejor plataforma para jugar según tu presupuesto, gustos y necesidades.",
+      "contenido": "## El eterno debate\n\nLa pregunta de si es mejor jugar en PC o en consola sigue siendo relevante en 2025, pero la respuesta depende más que nunca de las circunstancias individuales de cada jugador.\n\n## PC: potencia y versatilidad\n\nEl PC ofrece la mejor experiencia técnica posible, mods, retrocompatibilidad total y la flexibilidad de ser una herramienta de trabajo además de entretenimiento. Sin embargo, el coste inicial es significativamente mayor.\n\n## Consolas: simplicidad y exclusivos\n\nLas consolas ofrecen una experiencia plug-and-play sin complicaciones técnicas. Los exclusivos siguen siendo un factor diferencial importante, aunque cada vez más títulos llegan a todas las plataformas.\n\n## Steam Deck y el punto medio\n\nLa irrupción de las portátiles gaming como Steam Deck ha difuminado las líneas entre PC y consola, ofreciendo lo mejor de ambos mundos en un formato compacto y asequible.",
+      "fechaPublicacion": "2025-01-28T14:00:00.000Z",
+      "metaTitle": "¿PC o consola en 2025? Guía de compra | Blog Pixelcrit",
+      "metaDescription": "Te ayudamos a elegir entre PC y consola en 2025. Comparamos precios, exclusivos, rendimiento y experiencia de uso."
+    },
+    {
+      "titulo": "El impacto del DualSense en el diseño de juegos",
+      "slug": "impacto-dualsense-diseno-juegos",
+      "extracto": "Cómo el mando de PS5 está cambiando la forma en que los desarrolladores piensan la interacción con el jugador.",
+      "contenido": "## Más allá de la vibración\n\nEl DualSense de PlayStation 5 representó un salto generacional en la forma en que sentimos los juegos. El feedback háptico y los gatillos adaptativos han abierto nuevas posibilidades de diseño.\n\n## Casos de éxito\n\nAstro Bot es el mejor ejemplo de lo que el DualSense puede lograr. Cada superficie tiene una textura diferente, cada acción tiene un peso único y la inmersión alcanza niveles que antes eran impensables con un mando.\n\n## El reto de la adopción\n\nNo todos los desarrolladores aprovechan el potencial del DualSense. Muchos lo ignoran o lo implementan de forma superficial, perdiendo una oportunidad de diferenciación significativa.\n\n## El futuro de la interacción\n\nLa tecnología del DualSense sugiere un futuro donde el mando no es solo un dispositivo de entrada, sino una extensión sensorial del mundo virtual que estamos explorando.",
+      "fechaPublicacion": "2025-02-05T16:00:00.000Z",
+      "metaTitle": "El impacto del DualSense en los videojuegos | Blog Pixelcrit",
+      "metaDescription": "Analizamos cómo el mando DualSense de PS5 está transformando el diseño de videojuegos con su feedback háptico y gatillos adaptativos."
+    }
+  ],
+  "contactos": [
+    {
+      "nombre": "Laura Martínez",
+      "email": "laura.martinez@email.com",
+      "asunto": "Colaboración para reseña",
+      "mensaje": "Hola, soy community manager de un estudio indie y nos gustaría enviaros una copia de nuestro próximo juego para reseña. ¿Cómo podemos coordinarlo?",
+      "fecha": "2025-02-10"
+    },
+    {
+      "nombre": "Carlos Ruiz",
+      "email": "carlos.ruiz@email.com",
+      "asunto": "Error en la puntuación",
+      "mensaje": "He detectado que en la reseña de Cyberpunk 2077 aparece una puntuación diferente en el listado y en la página individual. ¿Podrían revisarlo?",
+      "fecha": "2025-02-12"
+    },
+    {
+      "nombre": "Ana García",
+      "email": "ana.garcia@email.com",
+      "asunto": "Sugerencia de contenido",
+      "mensaje": "Me encantaría leer un artículo sobre la evolución de los juegos de terror. Desde Silent Hill hasta los títulos actuales. ¿Lo tenéis en vuestro roadmap?",
+      "fecha": "2025-02-14"
+    }
+  ]
+}
