@@ -25,6 +25,9 @@ const {
   plataformas,
 } = videojuego;
 
+import { marked } from 'marked';
+
+const descripcionHtml = descripcionCompleta ? marked(descripcionCompleta) : null;
 const imagenUrl = imagenPrincipal?.url
   ? `http://46.225.167.247:1337${imagenPrincipal.url}`
   : null;
