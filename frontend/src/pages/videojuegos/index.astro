@@ -74,12 +74,13 @@ const generoActivo = generoParam ? generos.find((g) => g.slug === generoParam) :
 const plataformaActiva = plataformaParam ? plataformas.find((p) => p.slug === plataformaParam) : null;
 
 const filtroActivo = generoActivo?.nombre || plataformaActiva?.nombre || null;
+const tituloPagina = paginaVideojuegos?.titulo ?? "Videojuegos";
 const tituloSEO = filtroActivo
-  ? `${paginaVideojuegos.titulo} de ${filtroActivo} | PixelCrit`
-  : paginaVideojuegos.metaTitle;
+  ? `${tituloPagina} de ${filtroActivo} | PixelCrit`
+  : (paginaVideojuegos?.metaTitle ?? "Videojuegos | PixelCrit");
 const descripcionSEO = filtroActivo
   ? `Reseñas y análisis de videojuegos de ${filtroActivo} en PixelCrit.`
-  : paginaVideojuegos.metaDescription;
+  : (paginaVideojuegos?.metaDescription ?? "Todas las reseñas de videojuegos en PixelCrit.");
 ---
 
 <Layout title={tituloSEO} description={descripcionSEO}>
@@ -88,12 +89,12 @@ const descripcionSEO = filtroActivo
     <!-- Cabecera -->
     <div class="mb-8">
       <h1 class="font-bungee text-4xl md:text-5xl text-text-primary uppercase mb-3">
-        {filtroActivo ? `${paginaVideojuegos.titulo} de ${filtroActivo}` : paginaVideojuegos.titulo}
+        {filtroActivo ? `${tituloPagina} de ${filtroActivo}` : tituloPagina}
       </h1>
       <p class="text-text-secondary text-lg">
         {busquedaParam || filtroActivo
           ? `${videojuegosFiltrados.length} ${videojuegosFiltrados.length === 1 ? 'resultado' : 'resultados'} encontrados.`
-          : paginaVideojuegos.descripcion
+          : (paginaVideojuegos?.descripcion ?? "Todas nuestras reseñas y análisis.")
         }
       </p>
     </div>
@@ -108,7 +109,7 @@ const descripcionSEO = filtroActivo
           id="busqueda-videojuegos"
           type="search"
           value={busquedaParam}
-          placeholder={paginaVideojuegos.placeholderBusqueda}
+          placeholder={paginaVideojuegos?.placeholderBusqueda ?? "Buscar videojuego..."}
           data-genero={generoParam ?? ""}
           class="w-full bg-dark-secondary border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/60 transition-colors"
         />
@@ -137,7 +138,7 @@ const descripcionSEO = filtroActivo
             : "bg-dark-secondary border border-white/10 text-text-muted hover:border-primary/40 hover:text-text-primary",
         ]}
       >
-        {paginaVideojuegos.textoTodos}
+        {paginaVideojuegos?.textoTodos ?? "Todos"}
       </a>
       {generos.map((g) => (
         <a
@@ -175,9 +176,9 @@ const descripcionSEO = filtroActivo
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </div>
-        <p class="text-text-muted text-lg">{paginaVideojuegos.textoSinResultados}</p>
+        <p class="text-text-muted text-lg">{paginaVideojuegos?.textoSinResultados ?? "No hay videojuegos que coincidan con tu búsqueda."}</p>
         <a href="/videojuegos" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium mt-4 transition">
-          {paginaVideojuegos.textoVerTodos}
+          {paginaVideojuegos?.textoVerTodos ?? "Ver todos los videojuegos"}
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
           </svg>
@@ -194,14 +195,14 @@ const descripcionSEO = filtroActivo
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
             </svg>
-            {paginaVideojuegos.textoAnterior}
+            {paginaVideojuegos?.textoAnterior ?? "Anterior"}
           </a>
         ) : (
           <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
             </svg>
-            {paginaVideojuegos.textoAnterior}
+            {paginaVideojuegos?.textoAnterior ?? "Anterior"}
           </span>
         )}
 
@@ -229,14 +230,14 @@ const descripcionSEO = filtroActivo
 
         {paginaValida < totalPaginas ? (
           <a href={urlPagina(paginaValida + 1)} class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">
-            {paginaVideojuegos.textoSiguiente}
+            {paginaVideojuegos?.textoSiguiente ?? "Siguiente"}
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
           </a>
         ) : (
           <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
-            {paginaVideojuegos.textoSiguiente}
+            {paginaVideojuegos?.textoSiguiente ?? "Siguiente"}
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>

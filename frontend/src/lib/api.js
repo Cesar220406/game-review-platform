@@ -173,11 +173,21 @@ export async function getArticuloPorSlug(slug) {
 }
 
 export async function getPaginaVideojuegos() {
-  const { data } = await fetchStrapi("/pagina-videojuegos");
-  return data;
+  try {
+    const { data } = await fetchStrapi("/pagina-videojuegos");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener pagina-videojuegos:", error);
+    return null;
+  }
 }
 
 export async function getPaginaVideojuegoDetalle() {
-  const { data } = await fetchStrapi("/pagina-videojuego-detalle");
-  return data;
+  try {
+    const { data } = await fetchStrapi("/pagina-videojuego-detalle");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener pagina-videojuego-detalle:", error);
+    return null;
+  }
 }

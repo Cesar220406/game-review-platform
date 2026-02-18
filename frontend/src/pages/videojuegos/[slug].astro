@@ -90,13 +90,13 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <div class="grid grid-cols-2 gap-4 mt-2">
           {desarrolladora && (
             <div class="bg-dark-secondary rounded-lg p-4 border border-white/5">
-              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle.etiquetaDesarrolladora}</p>
+              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle?.etiquetaDesarrolladora ?? "Desarrolladora"}</p>
               <p class="text-text-primary font-medium">{desarrolladora}</p>
             </div>
           )}
           {fechaLanzamiento && (
             <div class="bg-dark-secondary rounded-lg p-4 border border-white/5">
-              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle.etiquetaLanzamiento}</p>
+              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle?.etiquetaLanzamiento ?? "Lanzamiento"}</p>
               <p class="text-text-primary font-medium">
                 {new Date(fechaLanzamiento).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
@@ -107,7 +107,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <!-- PLATAFORMAS -->
         {plataformasNombres.length > 0 && (
           <div>
-            <p class="text-xs text-text-muted uppercase tracking-wider mb-2">{paginaDetalle.etiquetaDisponibleEn}</p>
+            <p class="text-xs text-text-muted uppercase tracking-wider mb-2">{paginaDetalle?.etiquetaDisponibleEn ?? "Disponible en"}</p>
             <div class="flex flex-wrap gap-2">
               {plataformasNombres.map((p: string) => (
                 <span class="text-sm bg-dark-secondary border border-white/10 text-text-secondary rounded-full px-4 py-1.5">{p}</span>
@@ -122,7 +122,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
     <!-- DESCRIPCIÓN COMPLETA -->
     {descripcionHtml && (
       <div class="bg-dark-secondary rounded-xl p-8 border border-white/5">
-        <h2 class="font-bungee text-2xl text-text-primary uppercase mb-6">{paginaDetalle.tituloSeccionAnalisis}</h2>
+        <h2 class="font-bungee text-2xl text-text-primary uppercase mb-6">{paginaDetalle?.tituloSeccionAnalisis ?? "Análisis completo"}</h2>
         <div
           class="prose prose-invert prose-lg max-w-none
                  prose-headings:font-bungee prose-headings:uppercase prose-headings:text-text-primary
@@ -142,7 +142,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
         </svg>
-        {paginaDetalle.textoVolver}
+        {paginaDetalle?.textoVolver ?? "Volver a videojuegos"}
       </a>
     </div>
 
