@@ -1,0 +1,45 @@
+{
+  "kind": "singleType",
+  "collectionName": "titulos",
+  "info": {
+    "singularName": "titulo",
+    "pluralName": "titulos",
+    "displayName": "PaginaVideojuegos"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string"
+    },
+    "descripcion": {
+      "type": "string"
+    },
+    "placeholderBusqueda": {
+      "type": "string"
+    },
+    "textoTodos": {
+      "type": "string"
+    },
+    "textoSinResultados": {
+      "type": "string"
+    },
+    "textoVerTodos": {
+      "type": "string"
+    },
+    "textoAnterior": {
+      "type": "string"
+    },
+    "textoSiguiente": {
+      "type": "string"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    }
+  }
+}

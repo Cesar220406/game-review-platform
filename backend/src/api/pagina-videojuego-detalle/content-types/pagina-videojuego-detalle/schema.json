@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "pagina_videojuego_detalles",
+  "info": {
+    "singularName": "pagina-videojuego-detalle",
+    "pluralName": "pagina-videojuego-detalles",
+    "displayName": "PaginaVideojuegoDetalle"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tituloSeccionAnalisis": {
+      "type": "string"
+    },
+    "textoVolver": {
+      "type": "string"
+    },
+    "etiquetaDesarrolladora": {
+      "type": "string"
+    },
+    "etiquetaLanzamiento": {
+      "type": "string"
+    },
+    "etiquetaDisponibleEn": {
+      "type": "string"
+    }
+  }
+}

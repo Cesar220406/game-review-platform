@@ -171,3 +171,13 @@ export async function getArticuloPorSlug(slug) {
     return null;
   }
 }
+
+export async function getPaginaVideojuegos() {
+  const { data } = await fetchStrapi("/pagina-videojuegos");
+  return data;
+}
+
+export async function getPaginaVideojuegoDetalle() {
+  const { data } = await fetchStrapi("/pagina-videojuego-detalle");
+  return data;
+}

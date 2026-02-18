@@ -617,6 +617,39 @@ export interface ApiPaginaBlogPaginaBlog extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiPaginaVideojuegoDetallePaginaVideojuegoDetalle
+  extends Struct.SingleTypeSchema {
+  collectionName: 'pagina_videojuego_detalles';
+  info: {
+    displayName: 'PaginaVideojuegoDetalle';
+    pluralName: 'pagina-videojuego-detalles';
+    singularName: 'pagina-videojuego-detalle';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    etiquetaDesarrolladora: Schema.Attribute.String;
+    etiquetaDisponibleEn: Schema.Attribute.String;
+    etiquetaLanzamiento: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pagina-videojuego-detalle.pagina-videojuego-detalle'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    textoVolver: Schema.Attribute.String;
+    tituloSeccionAnalisis: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPlataformaPlataforma extends Struct.CollectionTypeSchema {
   collectionName: 'plataformas';
   info: {
@@ -650,6 +683,43 @@ export interface ApiPlataformaPlataforma extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::videojuego.videojuego'
     >;
+  };
+}
+
+export interface ApiTituloTitulo extends Struct.SingleTypeSchema {
+  collectionName: 'titulos';
+  info: {
+    displayName: 'PaginaVideojuegos';
+    pluralName: 'titulos';
+    singularName: 'titulo';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::titulo.titulo'
+    > &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.Text;
+    metaTitle: Schema.Attribute.String;
+    placeholderBusqueda: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    textoAnterior: Schema.Attribute.String;
+    textoSiguiente: Schema.Attribute.String;
+    textoSinResultados: Schema.Attribute.String;
+    textoTodos: Schema.Attribute.String;
+    textoVerTodos: Schema.Attribute.String;
+    titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1220,7 +1290,9 @@ declare module '@strapi/strapi' {
       'api::genero.genero': ApiGeneroGenero;
       'api::home.home': ApiHomeHome;
       'api::pagina-blog.pagina-blog': ApiPaginaBlogPaginaBlog;
+      'api::pagina-videojuego-detalle.pagina-videojuego-detalle': ApiPaginaVideojuegoDetallePaginaVideojuegoDetalle;
       'api::plataforma.plataforma': ApiPlataformaPlataforma;
+      'api::titulo.titulo': ApiTituloTitulo;
       'api::videojuego.videojuego': ApiVideojuegoVideojuego;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

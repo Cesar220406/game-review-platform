@@ -1,11 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getVideojuegoPorSlug } from "../../lib/api.js";
+import { getVideojuegoPorSlug, getPaginaVideojuegoDetalle } from "../../lib/api.js";
+import { marked } from 'marked';
 
 export const prerender = false;
 
 const { slug } = Astro.params;
-const videojuego = await getVideojuegoPorSlug(slug);
+const [videojuego, paginaDetalle] = await Promise.all([
+  getVideojuegoPorSlug(slug),
+  getPaginaVideojuegoDetalle(),
+]);
 
 if (!videojuego) {
   return Astro.redirect("/404");
@@ -25,12 +29,8 @@ const {
   plataformas,
 } = videojuego;
 
-import { marked } from 'marked';
-
 const descripcionHtml = descripcionCompleta ? marked(descripcionCompleta) : null;
-const imagenUrl = imagenPrincipal?.url
-  ? `http://46.225.167.247:1337${imagenPrincipal.url}`
-  : null;
+const imagenUrl = imagenPrincipal?.url ? `http://localhost:1337${imagenPrincipal.url}` : null;
 
 const generosNombres = generos?.map((g :  any) => g.nombre) ?? [];
 const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
@@ -38,10 +38,10 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
 
 <Layout title={metaTitle ?? titulo} description={metaDescription ?? descripcionCorta}>
   <article class="max-w-5xl mx-auto px-4 py-16">
-    
+
     <!-- CABECERA -->
     <div class="flex flex-col md:flex-row gap-10 mb-12">
-      
+
       <!-- IMAGEN -->
       <div class="w-full md:w-2/5 rounded-xl overflow-hidden border border-white/10">
         {imagenUrl ? (
@@ -57,7 +57,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
 
       <!-- INFO -->
       <div class="flex-1 flex flex-col gap-5">
-        
+
         <!-- GÉNEROS -->
         {generosNombres.length > 0 && (
           <div class="flex flex-wrap gap-2">
@@ -90,13 +90,13 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <div class="grid grid-cols-2 gap-4 mt-2">
           {desarrolladora && (
             <div class="bg-dark-secondary rounded-lg p-4 border border-white/5">
-              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">Desarrolladora</p>
+              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle.etiquetaDesarrolladora}</p>
               <p class="text-text-primary font-medium">{desarrolladora}</p>
             </div>
           )}
           {fechaLanzamiento && (
             <div class="bg-dark-secondary rounded-lg p-4 border border-white/5">
-              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">Lanzamiento</p>
+              <p class="text-xs text-text-muted uppercase tracking-wider mb-1">{paginaDetalle.etiquetaLanzamiento}</p>
               <p class="text-text-primary font-medium">
                 {new Date(fechaLanzamiento).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
@@ -107,7 +107,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <!-- PLATAFORMAS -->
         {plataformasNombres.length > 0 && (
           <div>
-            <p class="text-xs text-text-muted uppercase tracking-wider mb-2">Disponible en</p>
+            <p class="text-xs text-text-muted uppercase tracking-wider mb-2">{paginaDetalle.etiquetaDisponibleEn}</p>
             <div class="flex flex-wrap gap-2">
               {plataformasNombres.map((p: string) => (
                 <span class="text-sm bg-dark-secondary border border-white/10 text-text-secondary rounded-full px-4 py-1.5">{p}</span>
@@ -120,12 +120,19 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
     </div>
 
     <!-- DESCRIPCIÓN COMPLETA -->
-    {descripcionCompleta && (
+    {descripcionHtml && (
       <div class="bg-dark-secondary rounded-xl p-8 border border-white/5">
-        <h2 class="font-bungee text-2xl text-text-primary uppercase mb-6">Análisis completo</h2>
-        <div class="prose prose-invert prose-lg max-w-none text-text-secondary leading-relaxed">
-          {descripcionCompleta}
-        </div>
+        <h2 class="font-bungee text-2xl text-text-primary uppercase mb-6">{paginaDetalle.tituloSeccionAnalisis}</h2>
+        <div
+          class="prose prose-invert prose-lg max-w-none
+                 prose-headings:font-bungee prose-headings:uppercase prose-headings:text-text-primary
+                 prose-p:text-text-secondary prose-p:leading-relaxed
+                 prose-a:text-primary hover:prose-a:text-primary/80
+                 prose-strong:text-text-primary
+                 prose-blockquote:border-primary/40 prose-blockquote:text-text-muted
+                 prose-img:rounded-xl prose-img:border prose-img:border-white/5"
+          set:html={descripcionHtml}
+        />
       </div>
     )}
 
@@ -135,7 +142,7 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
         </svg>
-        Volver a videojuegos
+        {paginaDetalle.textoVolver}
       </a>
     </div>
 
