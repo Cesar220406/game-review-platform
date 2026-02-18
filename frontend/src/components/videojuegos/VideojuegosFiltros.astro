@@ -1,0 +1,44 @@
+---
+interface Genero {
+  id: number;
+  nombre: string;
+  slug: string;
+}
+
+interface Props {
+  generos: Genero[];
+  generoActivo: string | null;
+  busquedaParam: string;
+  textoTodos: string;
+}
+
+const { generos, generoActivo, busquedaParam, textoTodos } = Astro.props;
+---
+
+<!-- Filtros rápidos de género -->
+<div class="flex flex-wrap gap-2 mb-10">
+  <a
+    href={busquedaParam ? `/videojuegos?busqueda=${encodeURIComponent(busquedaParam)}` : "/videojuegos"}
+    class:list={[
+      "text-sm px-4 py-2 rounded-full font-medium transition-all duration-200",
+      !generoActivo
+        ? "bg-primary text-white"
+        : "bg-dark-secondary border border-white/10 text-text-muted hover:border-primary/40 hover:text-text-primary",
+    ]}
+  >
+    {textoTodos}
+  </a>
+  {generos.map((g) => (
+    <a
+      href={busquedaParam ? `/videojuegos?genero=${g.slug}&busqueda=${encodeURIComponent(busquedaParam)}` : `/videojuegos?genero=${g.slug}`}
+      class:list={[
+        "text-sm px-4 py-2 rounded-full font-medium transition-all duration-200",
+        generoActivo === g.slug
+          ? "bg-primary text-white"
+          : "bg-dark-secondary border border-white/10 text-text-muted hover:border-primary/40 hover:text-text-primary",
+      ]}
+    >
+      {g.nombre}
+    </a>
+  ))}
+</div>

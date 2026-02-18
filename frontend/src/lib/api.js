@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:1337/api";/**
+const API_URL = "http://localhost:1337/api";
+const MEDIA_URL = "http://localhost:1337";
+/**
  * @typedef {Object} Videojuego
  * @property {number} id
  * @property {string} titulo
@@ -24,7 +26,7 @@ export async function getVideojuegosDestacados() {
   return data.map((item) => {
     const { id, titulo, slug, descripcionCorta, destacado, puntuacion, imagenPrincipal, generos } = item;
     const imagen = imagenPrincipal?.url
-      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
+      ? `${MEDIA_URL}${imagenPrincipal.url}`
       : null;
     return {
       id, titulo, slug, descripcionCorta, destacado, puntuacion, imagen,
@@ -39,7 +41,7 @@ export async function getVideojuegos() {
   return data.map((item) => {
     const { id, titulo, slug, descripcionCorta, destacado, puntuacion, imagenPrincipal, generos } = item;
     const imagen = imagenPrincipal?.url
-      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
+      ? `${MEDIA_URL}${imagenPrincipal.url}`
       : null;
     return {
       id,
@@ -117,7 +119,7 @@ export async function getGenerosConJuegos() {
       descripcionCorta: v.descripcionCorta,
       puntuacion: v.puntuacion,
       imagen: v.imagenPrincipal?.url
-        ? `http://46.225.167.247:1337${v.imagenPrincipal.url}`
+        ? `${MEDIA_URL}${v.imagenPrincipal.url}`
         : null,
     })),
   }));
@@ -130,7 +132,7 @@ export async function getVideojuegosPorGenero(generoSlug) {
   return data.map((item) => {
     const { id, titulo, slug, descripcionCorta, puntuacion, imagenPrincipal, generos } = item;
     const imagen = imagenPrincipal?.url
-      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
+      ? `${MEDIA_URL}${imagenPrincipal.url}`
       : null;
     return {
       id, titulo, slug, descripcionCorta, puntuacion, imagen,
@@ -144,7 +146,7 @@ export async function getArticulos() {
   return data.map((item) => {
     const { id, titulo, slug, extracto, contenido, fechaPublicacion, imagenDestacada, metaTitle, metaDescription } = item;
     const imagen = imagenDestacada?.url
-      ? `http://46.225.167.247:1337${imagenDestacada.url}`
+      ? `${MEDIA_URL}${imagenDestacada.url}`
       : null;
     return { id, titulo, slug, extracto, contenido, fechaPublicacion, imagen, metaTitle, metaDescription };
   });
@@ -188,6 +190,16 @@ export async function getPaginaVideojuegoDetalle() {
     return data;
   } catch (error) {
     console.error("Error al obtener pagina-videojuego-detalle:", error);
+    return null;
+  }
+}
+
+export async function getPaginaContacto() {
+  try {
+    const { data } = await fetchStrapi("/pagina-contacto");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener pagina-contacto:", error);
     return null;
   }
 }

@@ -1,0 +1,72 @@
+---
+interface Props {
+  paginaActual: number;
+  totalPaginas: number;
+  paginas: number[];
+  rangoMin: number;
+  rangoMax: number;
+  urlPagina: (page: number) => string;
+  textoAnterior: string;
+  textoSiguiente: string;
+}
+
+const { paginaActual, totalPaginas, paginas, rangoMin, rangoMax, urlPagina, textoAnterior, textoSiguiente } = Astro.props;
+---
+
+<nav class="flex items-center justify-center gap-1 mt-12" aria-label="Paginación">
+
+  {paginaActual > 1 ? (
+    <a href={urlPagina(paginaActual - 1)} class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+      </svg>
+      {textoAnterior}
+    </a>
+  ) : (
+    <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+      </svg>
+      {textoAnterior}
+    </span>
+  )}
+
+  {rangoMin > 1 && (
+    <>
+      <a href={urlPagina(1)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">1</a>
+      {rangoMin > 2 && <span class="w-9 h-9 flex items-center justify-center text-text-muted text-sm">…</span>}
+    </>
+  )}
+
+  {paginas.map((p) => (
+    p === paginaActual ? (
+      <span class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold bg-primary text-white">{p}</span>
+    ) : (
+      <a href={urlPagina(p)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">{p}</a>
+    )
+  ))}
+
+  {rangoMax < totalPaginas && (
+    <>
+      {rangoMax < totalPaginas - 1 && <span class="w-9 h-9 flex items-center justify-center text-text-muted text-sm">…</span>}
+      <a href={urlPagina(totalPaginas)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">{totalPaginas}</a>
+    </>
+  )}
+
+  {paginaActual < totalPaginas ? (
+    <a href={urlPagina(paginaActual + 1)} class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">
+      {textoSiguiente}
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+      </svg>
+    </a>
+  ) : (
+    <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
+      {textoSiguiente}
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+      </svg>
+    </span>
+  )}
+
+</nav>

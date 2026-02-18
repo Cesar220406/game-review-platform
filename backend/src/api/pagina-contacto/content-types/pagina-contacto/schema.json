@@ -1,0 +1,69 @@
+{
+  "kind": "singleType",
+  "collectionName": "pagina_contactos",
+  "info": {
+    "singularName": "pagina-contacto",
+    "pluralName": "pagina-contactos",
+    "displayName": "PaginaContacto"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string"
+    },
+    "descripcion": {
+      "type": "string"
+    },
+    "tituloFormulario": {
+      "type": "string"
+    },
+    "labelNombre": {
+      "type": "string"
+    },
+    "labelEmail": {
+      "type": "string"
+    },
+    "labelAsunto": {
+      "type": "string"
+    },
+    "labelMensaje": {
+      "type": "string"
+    },
+    "placeholderNombre": {
+      "type": "string"
+    },
+    "placeholderEmail": {
+      "type": "string"
+    },
+    "placeholderAsunto": {
+      "type": "string"
+    },
+    "placeholderMensaje": {
+      "type": "string"
+    },
+    "textoBotonEnviar": {
+      "type": "string"
+    },
+    "tituloInformacion": {
+      "type": "string"
+    },
+    "tituloFAQ": {
+      "type": "string"
+    },
+    "emailContacto": {
+      "type": "string"
+    },
+    "tiempoRespuesta": {
+      "type": "string"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    }
+  }
+}

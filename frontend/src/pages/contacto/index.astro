@@ -1,240 +1,55 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getPaginaContacto } from "../../lib/api.js";
+import ContactoHeader from "../../components/contacto/ContactoHeader.astro";
+import ContactoFormulario from "../../components/contacto/ContactoFormulario.astro";
+import ContactoInfo from "../../components/contacto/ContactoInfo.astro";
+import ContactoFAQ from "../../components/contacto/ContactoFAQ.astro";
 
 export const prerender = false;
+
+const paginaContacto = await getPaginaContacto();
 ---
 
 <Layout
-  title="Contacto | PixelCrit"
-  description="¿Tienes alguna pregunta, sugerencia o quieres colaborar con PixelCrit? Ponte en contacto con nuestro equipo."
+  title={paginaContacto?.metaTitle ?? "Contacto | PixelCrit"}
+  description={paginaContacto?.metaDescription ?? "¿Tienes alguna pregunta, sugerencia o quieres colaborar con PixelCrit? Ponte en contacto con nuestro equipo."}
 >
-  <section class="max-w-7xl mx-auto px-4 py-16">
+  <section class="max-w-5xl mx-auto px-4 py-16">
 
-    <!-- Cabecera -->
-    <div class="mb-12 text-center max-w-2xl mx-auto">
-      <h1 class="font-bungee text-4xl md:text-5xl text-text-primary uppercase mb-3">Contacto</h1>
-      <p class="text-text-secondary text-lg">
-        ¿Tienes algo que contarnos? Rellena el formulario y te responderemos lo antes posible.
-      </p>
+    <ContactoHeader
+      titulo={paginaContacto?.titulo ?? "Contacto"}
+      descripcion={paginaContacto?.descripcion ?? "¿Tienes algo que contarnos? Rellena el formulario y te responderemos lo antes posible."}
+    />
+
+    <div class="grid md:grid-cols-2 gap-8 mt-12">
+
+      <ContactoFormulario
+        tituloFormulario={paginaContacto?.tituloFormulario ?? "Envíanos un mensaje"}
+        labelNombre={paginaContacto?.labelNombre ?? "Nombre"}
+        labelEmail={paginaContacto?.labelEmail ?? "Email"}
+        labelAsunto={paginaContacto?.labelAsunto ?? "Asunto"}
+        labelMensaje={paginaContacto?.labelMensaje ?? "Mensaje"}
+        placeholderNombre={paginaContacto?.placeholderNombre ?? "Tu nombre"}
+        placeholderEmail={paginaContacto?.placeholderEmail ?? "tu@email.com"}
+        placeholderAsunto={paginaContacto?.placeholderAsunto ?? "Selecciona un asunto"}
+        placeholderMensaje={paginaContacto?.placeholderMensaje ?? "Escribe tu mensaje aquí..."}
+        textoBotonEnviar={paginaContacto?.textoBotonEnviar ?? "Enviar mensaje"}
+      />
+
+      <div class="flex flex-col gap-8">
+        <ContactoInfo
+          tituloInformacion={paginaContacto?.tituloInformacion ?? "Información"}
+          emailContacto={paginaContacto?.emailContacto ?? "contacto@pixelcrit.es"}
+          tiempoRespuesta={paginaContacto?.tiempoRespuesta ?? "24 - 48 horas"}
+        />
+
+        <ContactoFAQ
+          tituloFAQ={paginaContacto?.tituloFAQ ?? "FAQ"}
+        />
+      </div>
+
     </div>
 
-    <div class="grid lg:grid-cols-[1fr_380px] gap-10 max-w-5xl mx-auto">
-
-      <!-- Formulario -->
-      <form id="contact-form" class="bg-dark-secondary rounded-2xl border border-white/5 p-8 md:p-10 flex flex-col gap-6">
-
-        <div class="grid sm:grid-cols-2 gap-6">
-          <!-- Nombre -->
-          <div class="flex flex-col gap-2">
-            <label for="nombre" class="text-sm font-medium text-text-secondary">Nombre</label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              required
-              placeholder="Tu nombre"
-              class="contact-input"
-            />
-          </div>
-
-          <!-- Email -->
-          <div class="flex flex-col gap-2">
-            <label for="email" class="text-sm font-medium text-text-secondary">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="tu@email.com"
-              class="contact-input"
-            />
-          </div>
-        </div>
-
-        <!-- Asunto -->
-        <div class="flex flex-col gap-2">
-          <label for="asunto" class="text-sm font-medium text-text-secondary">Asunto</label>
-          <select id="asunto" name="asunto" required class="contact-input">
-            <option value="" disabled selected>Selecciona un asunto</option>
-            <option value="sugerencia">Sugerencia de reseña</option>
-            <option value="colaboracion">Colaboración</option>
-            <option value="error">Reportar un error</option>
-            <option value="consulta">Consulta general</option>
-            <option value="otro">Otro</option>
-          </select>
-        </div>
-
-        <!-- Mensaje -->
-        <div class="flex flex-col gap-2">
-          <label for="mensaje" class="text-sm font-medium text-text-secondary">Mensaje</label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            required
-            rows="5"
-            placeholder="Escribe tu mensaje aquí..."
-            class="contact-input resize-none"
-          ></textarea>
-        </div>
-
-        <!-- Botón enviar -->
-        <button
-          type="submit"
-          class="inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/85 text-white font-bold px-7 py-3.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-secondary/25 hover:-translate-y-0.5 mt-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-          </svg>
-          Enviar mensaje
-        </button>
-
-        <!-- Mensaje de éxito -->
-        <div id="success-msg" class="hidden text-center py-4 px-6 bg-green-500/10 border border-green-500/30 rounded-lg">
-          <p class="text-green-400 font-medium">¡Mensaje enviado correctamente! Te responderemos pronto.</p>
-        </div>
-      </form>
-
-      <!-- Info lateral -->
-      <aside class="flex flex-col gap-6">
-
-        <!-- Tarjeta info -->
-        <div class="bg-dark-secondary rounded-2xl border border-white/5 p-8 flex flex-col gap-6">
-          <h2 class="font-bungee text-xl text-text-primary uppercase">Información</h2>
-
-          <div class="flex flex-col gap-5">
-            <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-sm font-medium text-text-primary">Email</h3>
-                <p class="text-text-muted text-sm mt-0.5">contacto@pixelcrit.es</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-sm font-medium text-text-primary">Tiempo de respuesta</h3>
-                <p class="text-text-muted text-sm mt-0.5">24 - 48 horas</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tarjeta FAQ rápido -->
-        <div class="bg-dark-secondary rounded-2xl border border-white/5 p-8 flex flex-col gap-5">
-          <h2 class="font-bungee text-xl text-text-primary uppercase">FAQ</h2>
-
-          <details class="faq-item group">
-            <summary class="faq-summary">
-              ¿Puedo sugerir un juego para reseñar?
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-text-muted group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <p class="text-text-muted text-sm mt-2 leading-relaxed">
-              ¡Por supuesto! Selecciona "Sugerencia de reseña" en el formulario y cuéntanos qué juego te gustaría que analicemos.
-            </p>
-          </details>
-
-          <details class="faq-item group">
-            <summary class="faq-summary">
-              ¿Aceptáis colaboraciones?
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-text-muted group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <p class="text-text-muted text-sm mt-2 leading-relaxed">
-              Sí, estamos abiertos a colaboraciones con creadores de contenido y estudios. Escríbenos con tu propuesta.
-            </p>
-          </details>
-
-          <details class="faq-item group">
-            <summary class="faq-summary">
-              ¿Cómo se calculan las puntuaciones?
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-text-muted group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <p class="text-text-muted text-sm mt-2 leading-relaxed">
-              Evaluamos jugabilidad, narrativa, diseño, sonido y rendimiento técnico. Cada reseña refleja la experiencia real de nuestro equipo.
-            </p>
-          </details>
-        </div>
-
-      </aside>
-    </div>
   </section>
 </Layout>
-
-<style>
-  .contact-input {
-    background: var(--color-dark-primary);
-    border: 1px solid color-mix(in srgb, white 8%, transparent);
-    border-radius: 0.75rem;
-    padding: 0.75rem 1rem;
-    color: var(--color-text-primary);
-    font-size: 0.9375rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-  }
-
-  .contact-input::placeholder {
-    color: var(--color-text-muted);
-  }
-
-  .contact-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
-  }
-
-  .faq-item {
-    border-bottom: 1px solid color-mix(in srgb, white 5%, transparent);
-    padding-bottom: 1rem;
-  }
-
-  .faq-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  .faq-summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    list-style: none;
-    transition: color 0.2s;
-  }
-
-  .faq-summary:hover {
-    color: var(--color-text-primary);
-  }
-
-  .faq-summary::-webkit-details-marker {
-    display: none;
-  }
-</style>
-
-<script>
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  const successMsg = document.getElementById('success-msg');
-
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    form.reset();
-    successMsg?.classList.remove('hidden');
-    setTimeout(() => successMsg?.classList.add('hidden'), 5000);
-  });
-</script>

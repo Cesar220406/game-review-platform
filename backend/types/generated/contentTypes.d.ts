@@ -617,6 +617,52 @@ export interface ApiPaginaBlogPaginaBlog extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiPaginaContactoPaginaContacto
+  extends Struct.SingleTypeSchema {
+  collectionName: 'pagina_contactos';
+  info: {
+    displayName: 'PaginaContacto';
+    pluralName: 'pagina-contactos';
+    singularName: 'pagina-contacto';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.String;
+    emailContacto: Schema.Attribute.String;
+    labelAsunto: Schema.Attribute.String;
+    labelEmail: Schema.Attribute.String;
+    labelMensaje: Schema.Attribute.String;
+    labelNombre: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pagina-contacto.pagina-contacto'
+    > &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.String;
+    metaTitle: Schema.Attribute.String;
+    placeholderAsunto: Schema.Attribute.String;
+    placeholderEmail: Schema.Attribute.String;
+    placeholderMensaje: Schema.Attribute.String;
+    placeholderNombre: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    textoBotonEnviar: Schema.Attribute.String;
+    tiempoRespuesta: Schema.Attribute.String;
+    titulo: Schema.Attribute.String;
+    tituloFAQ: Schema.Attribute.String;
+    tituloFormulario: Schema.Attribute.String;
+    tituloInformacion: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPaginaVideojuegoDetallePaginaVideojuegoDetalle
   extends Struct.SingleTypeSchema {
   collectionName: 'pagina_videojuego_detalles';
@@ -1290,6 +1336,7 @@ declare module '@strapi/strapi' {
       'api::genero.genero': ApiGeneroGenero;
       'api::home.home': ApiHomeHome;
       'api::pagina-blog.pagina-blog': ApiPaginaBlogPaginaBlog;
+      'api::pagina-contacto.pagina-contacto': ApiPaginaContactoPaginaContacto;
       'api::pagina-videojuego-detalle.pagina-videojuego-detalle': ApiPaginaVideojuegoDetallePaginaVideojuegoDetalle;
       'api::plataforma.plataforma': ApiPlataformaPlataforma;
       'api::titulo.titulo': ApiTituloTitulo;

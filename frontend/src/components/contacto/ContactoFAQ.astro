@@ -1,0 +1,112 @@
+---
+interface Props {
+  tituloFAQ: string;
+}
+
+const { tituloFAQ } = Astro.props;
+
+const preguntas = [
+  {
+    pregunta: "¿Puedo sugerir un juego para reseñar?",
+    respuesta: "¡Por supuesto! Selecciona \"Sugerencia\" en el formulario y cuéntanos qué juego te gustaría que analicemos.",
+  },
+  {
+    pregunta: "¿Aceptáis colaboraciones?",
+    respuesta: "Sí, estamos abiertos a colaboraciones con creadores de contenido y estudios. Escríbenos con tu propuesta.",
+  },
+  {
+    pregunta: "¿Cómo se calculan las puntuaciones?",
+    respuesta: "Evaluamos jugabilidad, narrativa, diseño, sonido y rendimiento técnico. Cada reseña refleja la experiencia real de nuestro equipo.",
+  },
+  {
+    pregunta: "¿Con qué frecuencia publicáis nuevas reseñas?",
+    respuesta: "Publicamos entre dos y cuatro reseñas semanales, priorizando lanzamientos recientes y joyas menos conocidas.",
+  },
+];
+---
+
+<div class="bg-dark-secondary rounded-2xl border border-white/5 p-8 flex flex-col gap-5">
+  <h2 class="font-bungee text-xl text-text-primary uppercase">{tituloFAQ}</h2>
+
+  <div id="faq-list" class="flex flex-col gap-0">
+    {preguntas.map((item, i) => (
+      <div class:list={["faq-item", i < preguntas.length - 1 ? "border-b border-white/5" : ""]}>
+        <button
+          type="button"
+          class="faq-summary w-full"
+          aria-expanded="false"
+          data-faq-btn
+        >
+          <span>{item.pregunta}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon w-4 h-4 text-text-muted flex-shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div class="faq-answer" data-faq-answer hidden>
+          <p class="text-text-muted text-sm pb-4 leading-relaxed">{item.respuesta}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .faq-item {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .faq-item:first-child {
+    padding-top: 0;
+  }
+
+  .faq-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .faq-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .faq-summary:hover {
+    color: var(--color-text-primary);
+  }
+
+  .faq-icon.rotated {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-faq-btn]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const answer = btn.nextElementSibling as HTMLElement | null;
+      const icon = btn.querySelector<SVGElement>(".faq-icon");
+      if (!answer) return;
+
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+
+      if (isOpen) {
+        btn.setAttribute("aria-expanded", "false");
+        answer.hidden = true;
+        icon?.classList.remove("rotated");
+      } else {
+        btn.setAttribute("aria-expanded", "true");
+        answer.hidden = false;
+        icon?.classList.add("rotated");
+      }
+    });
+  });
+</script>

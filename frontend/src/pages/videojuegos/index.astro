@@ -1,7 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import GameCard from "../../components/shared/GameCard.astro";
 import { getVideojuegos, getGeneros, getPlatforms, getPaginaVideojuegos } from "../../lib/api.js";
+import VideojuegosHeader from "../../components/videojuegos/VideojuegosHeader.astro";
+import VideojuegosFiltros from "../../components/videojuegos/VideojuegosFiltros.astro";
+import VideojuegosGrid from "../../components/videojuegos/VideojuegosGrid.astro";
+import VideojuegosPaginacion from "../../components/videojuegos/VideojuegosPaginacion.astro";
 
 export const prerender = false;
 
@@ -86,185 +89,41 @@ const descripcionSEO = filtroActivo
 <Layout title={tituloSEO} description={descripcionSEO}>
   <section class="max-w-7xl mx-auto px-4 py-16">
 
-    <!-- Cabecera -->
-    <div class="mb-8">
-      <h1 class="font-bungee text-4xl md:text-5xl text-text-primary uppercase mb-3">
-        {filtroActivo ? `${tituloPagina} de ${filtroActivo}` : tituloPagina}
-      </h1>
-      <p class="text-text-secondary text-lg">
-        {busquedaParam || filtroActivo
-          ? `${videojuegosFiltrados.length} ${videojuegosFiltrados.length === 1 ? 'resultado' : 'resultados'} encontrados.`
-          : (paginaVideojuegos?.descripcion ?? "Todas nuestras reseñas y análisis.")
-        }
-      </p>
-    </div>
+    <VideojuegosHeader
+      titulo={filtroActivo ? `${tituloPagina} de ${filtroActivo}` : tituloPagina}
+      descripcion={paginaVideojuegos?.descripcion ?? "Todas nuestras reseñas y análisis."}
+      placeholderBusqueda={paginaVideojuegos?.placeholderBusqueda ?? "Buscar videojuego..."}
+      busquedaParam={busquedaParam}
+      totalResultados={videojuegosFiltrados.length}
+      filtroActivo={filtroActivo}
+      generoParam={generoParam}
+    />
 
-    <!-- Barra de búsqueda -->
-    <div class="mb-6">
-      <div class="relative max-w-xl">
-        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input
-          id="busqueda-videojuegos"
-          type="search"
-          value={busquedaParam}
-          placeholder={paginaVideojuegos?.placeholderBusqueda ?? "Buscar videojuego..."}
-          data-genero={generoParam ?? ""}
-          class="w-full bg-dark-secondary border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/60 transition-colors"
-        />
-        {busquedaParam && (
-          <a
-            href={generoParam ? `/videojuegos?genero=${generoParam}` : "/videojuegos"}
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition"
-            aria-label="Limpiar búsqueda"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-            </svg>
-          </a>
-        )}
-      </div>
-    </div>
+    <VideojuegosFiltros
+      generos={generos}
+      generoActivo={generoParam}
+      busquedaParam={busquedaParam}
+      textoTodos={paginaVideojuegos?.textoTodos ?? "Todos"}
+    />
 
-    <!-- Filtros rápidos de género -->
-    <div class="flex flex-wrap gap-2 mb-10">
-      <a
-        href={busquedaParam ? `/videojuegos?busqueda=${encodeURIComponent(busquedaParam)}` : "/videojuegos"}
-        class:list={[
-          "text-sm px-4 py-2 rounded-full font-medium transition-all duration-200",
-          !generoParam
-            ? "bg-primary text-white"
-            : "bg-dark-secondary border border-white/10 text-text-muted hover:border-primary/40 hover:text-text-primary",
-        ]}
-      >
-        {paginaVideojuegos?.textoTodos ?? "Todos"}
-      </a>
-      {generos.map((g) => (
-        <a
-          href={busquedaParam ? `/videojuegos?genero=${g.slug}&busqueda=${encodeURIComponent(busquedaParam)}` : `/videojuegos?genero=${g.slug}`}
-          class:list={[
-            "text-sm px-4 py-2 rounded-full font-medium transition-all duration-200",
-            generoParam === g.slug
-              ? "bg-primary text-white"
-              : "bg-dark-secondary border border-white/10 text-text-muted hover:border-primary/40 hover:text-text-primary",
-          ]}
-        >
-          {g.nombre}
-        </a>
-      ))}
-    </div>
+    <VideojuegosGrid
+      videojuegos={videojuegos}
+      textoSinResultados={paginaVideojuegos?.textoSinResultados ?? "No hay videojuegos que coincidan con tu búsqueda."}
+      textoVerTodos={paginaVideojuegos?.textoVerTodos ?? "Ver todos los videojuegos"}
+    />
 
-    <!-- Grid de videojuegos -->
-    {videojuegos.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {videojuegos.map(({ titulo, slug, imagen, puntuacion, generos, descripcionCorta }) => (
-          <GameCard
-            titulo={titulo}
-            slug={slug}
-            imagen={imagen}
-            puntuacion={puntuacion}
-            generos={generos}
-            descripcionCorta={descripcionCorta}
-          />
-        ))}
-      </div>
-    ) : (
-      <div class="text-center py-20">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-dark-secondary border border-white/10 mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-        </div>
-        <p class="text-text-muted text-lg">{paginaVideojuegos?.textoSinResultados ?? "No hay videojuegos que coincidan con tu búsqueda."}</p>
-        <a href="/videojuegos" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium mt-4 transition">
-          {paginaVideojuegos?.textoVerTodos ?? "Ver todos los videojuegos"}
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-          </svg>
-        </a>
-      </div>
-    )}
-
-    <!-- Paginación -->
     {totalPaginas > 1 && (
-      <nav class="flex items-center justify-center gap-1 mt-12" aria-label="Paginación">
-
-        {paginaValida > 1 ? (
-          <a href={urlPagina(paginaValida - 1)} class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-            </svg>
-            {paginaVideojuegos?.textoAnterior ?? "Anterior"}
-          </a>
-        ) : (
-          <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-            </svg>
-            {paginaVideojuegos?.textoAnterior ?? "Anterior"}
-          </span>
-        )}
-
-        {rangoMin > 1 && (
-          <>
-            <a href={urlPagina(1)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">1</a>
-            {rangoMin > 2 && <span class="w-9 h-9 flex items-center justify-center text-text-muted text-sm">…</span>}
-          </>
-        )}
-
-        {paginas.map((p) => (
-          p === paginaValida ? (
-            <span class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold bg-primary text-white">{p}</span>
-          ) : (
-            <a href={urlPagina(p)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">{p}</a>
-          )
-        ))}
-
-        {rangoMax < totalPaginas && (
-          <>
-            {rangoMax < totalPaginas - 1 && <span class="w-9 h-9 flex items-center justify-center text-text-muted text-sm">…</span>}
-            <a href={urlPagina(totalPaginas)} class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">{totalPaginas}</a>
-          </>
-        )}
-
-        {paginaValida < totalPaginas ? (
-          <a href={urlPagina(paginaValida + 1)} class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/10 text-text-secondary hover:border-primary/40 hover:text-primary transition-all duration-200">
-            {paginaVideojuegos?.textoSiguiente ?? "Siguiente"}
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-            </svg>
-          </a>
-        ) : (
-          <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-dark-secondary border border-white/5 text-text-muted opacity-40 cursor-not-allowed">
-            {paginaVideojuegos?.textoSiguiente ?? "Siguiente"}
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-            </svg>
-          </span>
-        )}
-
-      </nav>
+      <VideojuegosPaginacion
+        paginaActual={paginaValida}
+        totalPaginas={totalPaginas}
+        paginas={paginas}
+        rangoMin={rangoMin}
+        rangoMax={rangoMax}
+        urlPagina={urlPagina}
+        textoAnterior={paginaVideojuegos?.textoAnterior ?? "Anterior"}
+        textoSiguiente={paginaVideojuegos?.textoSiguiente ?? "Siguiente"}
+      />
     )}
 
   </section>
 </Layout>
-
-<script>
-  const input = document.getElementById('busqueda-videojuegos') as HTMLInputElement | null;
-  if (input) {
-    let timer: ReturnType<typeof setTimeout>;
-    input.addEventListener('input', () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        const q = input.value.trim();
-        const genero = input.dataset.genero ?? '';
-        const params = new URLSearchParams();
-        if (genero) params.set('genero', genero);
-        if (q) params.set('busqueda', q);
-        const qs = params.toString();
-        window.location.href = `/videojuegos${qs ? `?${qs}` : ''}`;
-      }, 350);
-    });
-  }
-</script>
