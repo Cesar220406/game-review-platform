@@ -1,117 +1,98 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getArticulos } from "../../lib/api.js";
+import { getArticulos, getPaginaBlog } from "../../lib/api.js";
 import { calcularTiempoLectura } from "../../lib/utils.js";
+import BlogHeader from "../../components/blog/BlogHeader.astro";
+import BlogDestacado from "../../components/blog/BlogDestacado.astro";
+import BlogGrid from "../../components/blog/BlogGrid.astro";
+import BlogPaginacion from "../../components/blog/BlogPaginacion.astro";
 
 export const prerender = false;
 
-const articulos = await getArticulos();
-const [destacado, ...restoArticulos] = articulos;
+const POR_PAGINA = 6;
+
+const busquedaParam = Astro.url.searchParams.get("busqueda")?.trim() ?? "";
+const pageParam = parseInt(Astro.url.searchParams.get("page") ?? "1", 10);
+const paginaActual = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
+function normalizar(str: string) {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+const [todosArticulos, paginaBlog] = await Promise.all([getArticulos(), getPaginaBlog()]);
+
+let articulosFiltrados = todosArticulos;
+if (busquedaParam) {
+  const q = normalizar(busquedaParam);
+  articulosFiltrados = todosArticulos.filter((a: any) =>
+    normalizar(a.titulo).includes(q) || normalizar(a.extracto ?? "").includes(q)
+  );
+}
+
+const totalPaginas = Math.max(1, Math.ceil(articulosFiltrados.length / POR_PAGINA));
+const paginaValida = Math.min(paginaActual, totalPaginas);
+
+// En página 1 sin búsqueda mostramos el destacado aparte
+const modoDestacado = paginaValida === 1 && !busquedaParam && articulosFiltrados.length > 0;
+const articulosEnPagina = modoDestacado
+  ? articulosFiltrados.slice(1, POR_PAGINA + 1)   // el slot 0 es el destacado
+  : articulosFiltrados.slice((paginaValida - 1) * POR_PAGINA, paginaValida * POR_PAGINA);
+const destacado = modoDestacado ? articulosFiltrados[0] : null;
+
+function urlPagina(page: number) {
+  const params = new URLSearchParams();
+  if (busquedaParam) params.set("busqueda", busquedaParam);
+  if (page > 1) params.set("page", String(page));
+  const qs = params.toString();
+  return `/blog${qs ? `?${qs}` : ""}`;
+}
+
+const rangoMin = Math.max(1, paginaValida - 2);
+const rangoMax = Math.min(totalPaginas, paginaValida + 2);
+const paginas = Array.from({ length: rangoMax - rangoMin + 1 }, (_, i) => rangoMin + i);
 ---
 
-<Layout title="Blog | PixelCrit" description="Artículos y análisis sobre videojuegos">
+<Layout title={paginaBlog?.metaTitle ?? "Blog | PixelCrit"} description={paginaBlog?.metaDescription ?? "Artículos y análisis sobre videojuegos"}>
   <section class="max-w-5xl mx-auto px-4 py-16">
 
-    <!-- Cabecera del blog -->
-    <div class="mb-12">
-      <h1 class="font-bungee text-4xl md:text-5xl text-text-primary uppercase mb-3">Blog</h1>
-      <p class="text-text-secondary text-lg">Análisis, tendencias y cultura gamer.</p>
-    </div>
+    <BlogHeader
+      titulo={paginaBlog?.titulo ?? "Blog"}
+      descripcion={paginaBlog?.descripcion ?? "Análisis, tendencias y cultura gamer."}
+      placeholderBusqueda={paginaBlog?.placeholderBusqueda ?? "Buscar artículo..."}
+      busquedaParam={busquedaParam}
+      totalResultados={articulosFiltrados.length}
+      textoResultados={paginaBlog?.textoResultados ?? "{count} resultados para"}
+    />
 
-    <!-- Artículo destacado -->
     {destacado && (
-      <a href={`/blog/${destacado.slug}`} class="block mb-16 group">
-        <article class="grid md:grid-cols-2 gap-0 bg-dark-secondary rounded-2xl overflow-hidden border border-white/5 hover:border-primary/40 transition-all duration-300">
-          <div class="aspect-[16/10] md:aspect-auto overflow-hidden">
-            {destacado.imagen ? (
-              <img
-                src={destacado.imagen}
-                alt={destacado.titulo}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            ) : (
-              <div class="w-full h-full min-h-[260px] bg-dark-tertiary flex items-center justify-center">
-                <span class="text-text-muted text-sm">Sin imagen</span>
-              </div>
-            )}
-          </div>
-          <div class="p-8 md:p-10 flex flex-col justify-center">
-            <span class="text-primary text-xs font-semibold uppercase tracking-widest mb-3">Destacado</span>
-            <time class="text-text-muted text-sm mb-1" datetime={destacado.fechaPublicacion}>
-              {new Date(destacado.fechaPublicacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            <p class="text-xs text-text-muted flex items-center gap-1 mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-              </svg>
-              {calcularTiempoLectura(destacado.contenido)} min de lectura
-            </p>
-            <h2 class="font-bungee text-2xl md:text-3xl text-text-primary uppercase leading-tight mb-4 group-hover:text-primary transition-colors duration-300">
-              {destacado.titulo}
-            </h2>
-            <p class="text-text-secondary leading-relaxed mb-6 line-clamp-3">{destacado.extracto}</p>
-            <span class="text-primary font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-              Leer artículo
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </span>
-          </div>
-        </article>
-      </a>
+      <BlogDestacado
+        articulo={destacado}
+        etiquetaDestacado={paginaBlog?.etiquetaDestacado ?? "Destacado"}
+        textoLeerArticulo={paginaBlog?.textoLeerArticulo ?? "Leer artículo"}
+        tiempoLectura={calcularTiempoLectura(destacado.contenido)}
+      />
     )}
 
-    <!-- Lista de artículos -->
-    {restoArticulos.length > 0 && (
-      <div class="flex flex-col gap-8">
-        {restoArticulos.map((articulo: any) => (
-          <a href={`/blog/${articulo.slug}`} class="block group">
-            <article class="grid md:grid-cols-[280px_1fr] gap-0 bg-dark-secondary rounded-xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all duration-300">
-              <div class="aspect-[16/10] md:aspect-auto overflow-hidden">
-                {articulo.imagen ? (
-                  <img
-                    src={articulo.imagen}
-                    alt={articulo.titulo}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div class="w-full h-full min-h-[180px] bg-dark-tertiary flex items-center justify-center">
-                    <span class="text-text-muted text-sm">Sin imagen</span>
-                  </div>
-                )}
-              </div>
-              <div class="p-6 md:p-8 flex flex-col justify-center">
-                <time class="text-text-muted text-xs mb-1" datetime={articulo.fechaPublicacion}>
-                  {new Date(articulo.fechaPublicacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </time>
-                <p class="text-xs text-text-muted flex items-center gap-1 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                  </svg>
-                  {calcularTiempoLectura(articulo.contenido)} min de lectura
-                </p>
-                <h2 class="font-bungee text-lg md:text-xl text-text-primary uppercase leading-tight mb-3 group-hover:text-primary transition-colors duration-300">
-                  {articulo.titulo}
-                </h2>
-                <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">{articulo.extracto}</p>
-                <span class="text-primary text-sm font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                  Leer artículo
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </div>
-            </article>
-          </a>
-        ))}
-      </div>
+    {(!destacado || articulosEnPagina.length > 0) && (
+      <BlogGrid
+        articulos={articulosEnPagina}
+        textoLeerArticulo={paginaBlog?.textoLeerArticulo ?? "Leer artículo"}
+        textoSinResultados={paginaBlog?.textoSinResultados ?? "No hay artículos que coincidan con tu búsqueda."}
+        textoVerTodos={paginaBlog?.textoVerTodos ?? "Ver todos los artículos"}
+      />
     )}
 
-    <!-- Estado vacío -->
-    {articulos.length === 0 && (
-      <div class="text-center py-20">
-        <p class="text-text-muted text-lg">No hay artículos publicados todavía.</p>
-      </div>
+    {totalPaginas > 1 && (
+      <BlogPaginacion
+        paginaActual={paginaValida}
+        totalPaginas={totalPaginas}
+        paginas={paginas}
+        rangoMin={rangoMin}
+        rangoMax={rangoMax}
+        urlPagina={urlPagina}
+        textoAnterior={paginaBlog?.textoAnterior ?? "Anterior"}
+        textoSiguiente={paginaBlog?.textoSiguiente ?? "Siguiente"}
+      />
     )}
 
   </section>

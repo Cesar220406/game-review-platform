@@ -578,6 +578,45 @@ export interface ApiHomeHome extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiPaginaBlogPaginaBlog extends Struct.SingleTypeSchema {
+  collectionName: 'pagina_blogs';
+  info: {
+    displayName: 'PaginaBlog';
+    pluralName: 'pagina-blogs';
+    singularName: 'pagina-blog';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.String;
+    etiquetaDestacado: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pagina-blog.pagina-blog'
+    > &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.Text;
+    metaTitle: Schema.Attribute.String;
+    placeholderBusqueda: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    textoAnterior: Schema.Attribute.String;
+    textoLeerArticulo: Schema.Attribute.String;
+    textoResultados: Schema.Attribute.String;
+    textoSiguiente: Schema.Attribute.String;
+    textoSinResultados: Schema.Attribute.String;
+    textoVerTodos: Schema.Attribute.String;
+    titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPlataformaPlataforma extends Struct.CollectionTypeSchema {
   collectionName: 'plataformas';
   info: {
@@ -1180,6 +1219,7 @@ declare module '@strapi/strapi' {
       'api::contacto.contacto': ApiContactoContacto;
       'api::genero.genero': ApiGeneroGenero;
       'api::home.home': ApiHomeHome;
+      'api::pagina-blog.pagina-blog': ApiPaginaBlogPaginaBlog;
       'api::plataforma.plataforma': ApiPlataformaPlataforma;
       'api::videojuego.videojuego': ApiVideojuegoVideojuego;
       'plugin::content-releases.release': PluginContentReleasesRelease;

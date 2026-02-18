@@ -1,0 +1,53 @@
+---
+interface Props {
+  articulo: {
+    slug: string;
+    titulo: string;
+    extracto?: string;
+    contenido?: string;
+    fechaPublicacion: string;
+    imagen?: string | null;
+  };
+  etiquetaDestacado: string;
+  textoLeerArticulo: string;
+  tiempoLectura: number;
+}
+
+const { articulo, etiquetaDestacado, textoLeerArticulo, tiempoLectura } = Astro.props;
+---
+
+<a href={`/blog/${articulo.slug}`} class="block mb-16 group">
+  <article class="grid md:grid-cols-2 gap-0 bg-dark-secondary rounded-2xl overflow-hidden border border-white/5 hover:border-primary/40 transition-all duration-300">
+    <div class="aspect-[16/10] md:aspect-auto overflow-hidden">
+      {articulo.imagen ? (
+        <img src={articulo.imagen} alt={articulo.titulo} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+      ) : (
+        <div class="w-full h-full min-h-[260px] bg-dark-tertiary flex items-center justify-center">
+          <span class="text-text-muted text-sm">Sin imagen</span>
+        </div>
+      )}
+    </div>
+    <div class="p-8 md:p-10 flex flex-col justify-center">
+      <span class="text-primary text-xs font-semibold uppercase tracking-widest mb-3">{etiquetaDestacado}</span>
+      <time class="text-text-muted text-sm mb-1" datetime={articulo.fechaPublicacion}>
+        {new Date(articulo.fechaPublicacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </time>
+      <p class="text-xs text-text-muted flex items-center gap-1 mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+        </svg>
+        {tiempoLectura} min de lectura
+      </p>
+      <h2 class="font-bungee text-2xl md:text-3xl text-text-primary uppercase leading-tight mb-4 group-hover:text-primary transition-colors duration-300">
+        {articulo.titulo}
+      </h2>
+      <p class="text-text-secondary leading-relaxed mb-6 line-clamp-3">{articulo.extracto}</p>
+      <span class="text-primary font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+        {textoLeerArticulo}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </span>
+    </div>
+  </article>
+</a>

@@ -1,5 +1,4 @@
-const API_URL = "http://46.225.167.247:1337/api";
-/**
+const API_URL = "http://localhost:1337/api";/**
  * @typedef {Object} Videojuego
  * @property {number} id
  * @property {string} titulo
@@ -149,6 +148,16 @@ export async function getArticulos() {
       : null;
     return { id, titulo, slug, extracto, contenido, fechaPublicacion, imagen, metaTitle, metaDescription };
   });
+}
+
+export async function getPaginaBlog() {
+  try {
+    const { data } = await fetchStrapi("/pagina-blog");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener pagina-blog:", error);
+    return null;
+  }
 }
 
 export async function getArticuloPorSlug(slug) {
