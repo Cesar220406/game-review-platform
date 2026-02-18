@@ -1,34 +1,53 @@
-<header class="bg-dark-primary border-b border-dark-tertiary">
+<header class="sticky top-0 z-50 bg-dark-primary/90 backdrop-blur-md border-b border-dark-tertiary">
   <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
     <!-- Logo + Texto -->
     <a href="/" class="flex items-center gap-3">
       <!-- Dado animado -->
       <div class="dice-container">
-        <img src="/public/img/d1.webp" alt="PixelCrit" class="dice-face active" data-index="0">
-        <img src="/public/img/d2.webp" alt="" class="dice-face" data-index="1">
-        <img src="/public/img/d3.webp" alt="" class="dice-face" data-index="2">
-        <img src="/public/img/d4.webp" alt="" class="dice-face" data-index="3">
-        <img src="/public/img/d5.webp" alt="" class="dice-face" data-index="4">
-        <img src="/public/img/d6.webp" alt="" class="dice-face" data-index="5">
-        <img src="/public/img/d7.webp" alt="" class="dice-face" data-index="6">
-        <img src="/public/img/d8.webp" alt="" class="dice-face" data-index="7">
-        <img src="/public/img/d9.webp" alt="" class="dice-face" data-index="8">
-        <img src="/public/img/d10.webp" alt="" class="dice-face" data-index="9">
+        <img src="/img/d1.webp" alt="PixelCrit" class="dice-face active" data-index="0">
+        <img src="/img/d2.webp" alt="" class="dice-face" data-index="1">
+        <img src="/img/d3.webp" alt="" class="dice-face" data-index="2">
+        <img src="/img/d4.webp" alt="" class="dice-face" data-index="3">
+        <img src="/img/d5.webp" alt="" class="dice-face" data-index="4">
+        <img src="/img/d6.webp" alt="" class="dice-face" data-index="5">
+        <img src="/img/d7.webp" alt="" class="dice-face" data-index="6">
+        <img src="/img/d8.webp" alt="" class="dice-face" data-index="7">
+        <img src="/img/d9.webp" alt="" class="dice-face" data-index="8">
+        <img src="/img/d10.webp" alt="" class="dice-face" data-index="9">
       </div>
       <!-- Texto del logo -->
       <img src="/img/logocontexto.webp" alt="PixelCrit" class="logo-text">
     </a>
 
-    <!-- Navegación -->
+    <!-- Navegación desktop -->
     <nav class="hidden md:flex gap-6 text-text-secondary font-medium">
       <a href="/" class="hover:text-primary transition">Inicio</a>
       <a href="/videojuegos" class="hover:text-primary transition">Videojuegos</a>
-      <a href="/generos" class="hover:text-primary transition">Géneros</a>
       <a href="/blog" class="hover:text-primary transition">Blog</a>
       <a href="/contacto" class="hover:text-primary transition">Contacto</a>
     </nav>
+
+    <!-- Botón hamburguesa móvil -->
+    <button id="menu-toggle" class="md:hidden text-text-secondary hover:text-primary transition p-2" aria-label="Abrir menú">
+      <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
   </div>
+
+  <!-- Menú móvil -->
+  <nav id="mobile-menu" class="md:hidden hidden border-t border-dark-tertiary bg-dark-primary">
+    <div class="flex flex-col px-4 py-4 gap-1">
+      <a href="/" class="mobile-link">Inicio</a>
+      <a href="/videojuegos" class="mobile-link">Videojuegos</a>
+      <a href="/blog" class="mobile-link">Blog</a>
+      <a href="/contacto" class="mobile-link">Contacto</a>
+    </div>
+  </nav>
 </header>
 
 <style>
@@ -70,31 +89,55 @@
     height: 150px;
     width: auto;
   }
+
+  .mobile-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-secondary, #94a3b8);
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .mobile-link:hover {
+    color: var(--color-primary, #8B5CF6);
+    background: rgba(139, 92, 246, 0.1);
+  }
 </style>
 
 <script>
+  // Dado animado
   const container = document.querySelector<HTMLDivElement>('.dice-container');
   const faces = document.querySelectorAll<HTMLImageElement>('.dice-face');
   let current = 0;
 
   setInterval(() => {
-    // Quitar la cara actual
     faces[current].classList.remove('active');
 
-    // Elegir una cara aleatoria distinta a la actual
     let next;
     do {
       next = Math.floor(Math.random() * faces.length);
     } while (next === current);
     current = next;
 
-    // Activar la nueva cara
     faces[current].classList.add('active');
 
-    // Latido del contenedor
     container?.classList.remove('pulse');
-    // Forzar reflow para reiniciar la animación
     void container?.offsetWidth;
     container?.classList.add('pulse');
   }, 1200);
+
+  // Menú hamburguesa
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = !mobileMenu?.classList.contains('hidden');
+    mobileMenu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+    toggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
+  });
 </script>

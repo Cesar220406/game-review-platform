@@ -29,24 +29,28 @@ export async function getVideojuegosDestacados() {
       : null;
     return {
       id, titulo, slug, descripcionCorta, destacado, puntuacion, imagen,
-      generos: generos?.map(g => g.nombre) || [],
+      generos: generos?.map(g => ({ nombre: g.nombre, slug: g.slug })) || [],
     };
   });
 }
 
 export async function getVideojuegos() {
-  const { data } = await fetchStrapi("/videojuegos?populate=generos");
+  const { data } = await fetchStrapi("/videojuegos?populate=*");
 
   return data.map((item) => {
-    const { id, titulo, slug, descripcionCorta, destacado, generos } = item;
-    
-    return { 
-      id, 
-      titulo, 
-      slug, 
-      descripcionCorta, 
+    const { id, titulo, slug, descripcionCorta, destacado, puntuacion, imagenPrincipal, generos } = item;
+    const imagen = imagenPrincipal?.url
+      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
+      : null;
+    return {
+      id,
+      titulo,
+      slug,
+      descripcionCorta,
       destacado,
-      generos: generos?.map(g => g.slug) || [] // SLUGS DE LOS GENEROS
+      puntuacion,
+      imagen,
+      generos: generos?.map(g => ({ nombre: g.nombre, slug: g.slug })) || [],
     };
   });
 }
@@ -99,14 +103,51 @@ export async function getVideojuegoPorSlug(slug) {
     return null;
   }
 }
+export async function getGenerosConJuegos() {
+  const { data } = await fetchStrapi("/generos?populate=videojuegos.imagenPrincipal");
+  return data.map(({ id, nombre, slug, descripcion, videojuegos }) => ({
+    id,
+    nombre,
+    slug,
+    descripcion: descripcion || "",
+    totalJuegos: videojuegos?.length || 0,
+    juegos: (videojuegos || []).map((v) => ({
+      id: v.id,
+      titulo: v.titulo,
+      slug: v.slug,
+      descripcionCorta: v.descripcionCorta,
+      puntuacion: v.puntuacion,
+      imagen: v.imagenPrincipal?.url
+        ? `http://46.225.167.247:1337${v.imagenPrincipal.url}`
+        : null,
+    })),
+  }));
+}
+
+export async function getVideojuegosPorGenero(generoSlug) {
+  const { data } = await fetchStrapi(
+    `/videojuegos?filters[generos][slug][$eq]=${generoSlug}&populate=*`
+  );
+  return data.map((item) => {
+    const { id, titulo, slug, descripcionCorta, puntuacion, imagenPrincipal, generos } = item;
+    const imagen = imagenPrincipal?.url
+      ? `http://46.225.167.247:1337${imagenPrincipal.url}`
+      : null;
+    return {
+      id, titulo, slug, descripcionCorta, puntuacion, imagen,
+      generos: generos?.map(g => g.nombre) || [],
+    };
+  });
+}
+
 export async function getArticulos() {
   const { data } = await fetchStrapi("/articulos?sort=fechaPublicacion:desc&populate=*");
   return data.map((item) => {
-    const { id, titulo, slug, extracto, fechaPublicacion, imagenDestacada, metaTitle, metaDescription } = item;
+    const { id, titulo, slug, extracto, contenido, fechaPublicacion, imagenDestacada, metaTitle, metaDescription } = item;
     const imagen = imagenDestacada?.url
       ? `http://46.225.167.247:1337${imagenDestacada.url}`
       : null;
-    return { id, titulo, slug, extracto, fechaPublicacion, imagen, metaTitle, metaDescription };
+    return { id, titulo, slug, extracto, contenido, fechaPublicacion, imagen, metaTitle, metaDescription };
   });
 }
 
