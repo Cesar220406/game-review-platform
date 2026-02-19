@@ -30,8 +30,7 @@ const {
 } = videojuego;
 
 const descripcionHtml = descripcionCompleta ? marked(descripcionCompleta) : null;
-const imagenUrl = imagenPrincipal?.url ? `http://localhost:1337${imagenPrincipal.url}` : null;
-
+const imagenUrl = imagenPrincipal?.url ?? null;
 const generosNombres = generos?.map((g :  any) => g.nombre) ?? [];
 const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
 ---

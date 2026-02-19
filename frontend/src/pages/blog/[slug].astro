@@ -26,7 +26,7 @@ const {
 
 const contenidoHtml = contenido ? marked(contenido) : null;
 const imagenUrl = imagenDestacada?.url
-  ? `http://localhost:1337${imagenDestacada.url}`
+  ? imagenDestacada.url
   : null;
 ---
 

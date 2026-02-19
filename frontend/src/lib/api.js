@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:1337/api";
-const MEDIA_URL = "http://localhost:1337";
+const MEDIA_URL = "";
 /**
  * @typedef {Object} Videojuego
  * @property {number} id

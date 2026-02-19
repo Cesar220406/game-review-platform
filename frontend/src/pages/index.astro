@@ -31,9 +31,7 @@ const {
   metaDescription
 } = home;
 
-const heroImagenUrl = heroImagen?.url
-  ? `http://localhost:1337${heroImagen.url}`
-  : '/img/imagenhero.webp';
+const heroImagenUrl = heroImagen?.url ?? '/img/imagenhero.webp';
 ---
 
 <Layout title={metaTitle} description={metaDescription}>
