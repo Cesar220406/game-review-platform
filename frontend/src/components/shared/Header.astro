@@ -1,143 +1,1063 @@
-<header class="sticky top-0 z-50 bg-dark-primary/90 backdrop-blur-md border-b border-dark-tertiary">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+---
+/**
+ * Header.astro — PixelCrit
+ *
+ * Features:
+ *  · Logo "PixelCrit" texto con glitch CSS (::before / ::after desplazados)
+ *  · Barra superior 3px gradiente animado primary→secondary→accent
+ *  · Glassmorphism + scanlines retro-gaming (overlay 4% opacidad)
+ *  · Nav con efecto de bloque expandiéndose desde el centro al hover
+ *  · Enlace activo detectado server-side + punto animado
+ *  · Botón "Entrar": borde gradiente, texto gradiente, relleno en hover
+ *  · Botón "Registrarse": gradiente + shimmer continuo
+ *  · Scroll: header más compacto y opaco
+ *  · Hamburger → X con CSS puro
+ *  · Menú móvil slide-down con glassmorphism
+ */
 
-    <!-- Logo + Texto -->
-    <a href="/" class="flex items-center gap-3">
-      <!-- Dado animado -->
-      <div class="dice-container">
-        <img src="/img/d1.webp" alt="PixelCrit" class="dice-face active" data-index="0">
-        <img src="/img/d2.webp" alt="" class="dice-face" data-index="1">
-        <img src="/img/d3.webp" alt="" class="dice-face" data-index="2">
-        <img src="/img/d4.webp" alt="" class="dice-face" data-index="3">
-        <img src="/img/d5.webp" alt="" class="dice-face" data-index="4">
-        <img src="/img/d6.webp" alt="" class="dice-face" data-index="5">
-        <img src="/img/d7.webp" alt="" class="dice-face" data-index="6">
-        <img src="/img/d8.webp" alt="" class="dice-face" data-index="7">
-        <img src="/img/d9.webp" alt="" class="dice-face" data-index="8">
-        <img src="/img/d10.webp" alt="" class="dice-face" data-index="9">
+const pathname = Astro.url.pathname;
+const isActive = (path: string) =>
+  path === '/' ? pathname === '/' : pathname.startsWith(path);
+
+const navLinks = [
+  { href: '/',            label: 'Inicio'      },
+  { href: '/videojuegos', label: 'Videojuegos' },
+  { href: '/blog',        label: 'Blog'        },
+  { href: '/contacto',    label: 'Contacto'    },
+];
+---
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  HEADER — PixelCrit                      ║
+     ╚══════════════════════════════════════════╝ -->
+<header id="hdr">
+
+  <!-- ── 1. BARRA SUPERIOR DE GRADIENTE ANIMADO ──────────────────────── -->
+  <div class="hdr-topbar" aria-hidden="true"></div>
+
+  <!-- ── 2. FONDO: glassmorphism + aurora + grid + scanlines ─────────── -->
+  <!-- Capa 1: blur del contenido de la página (debe ir primero) -->
+  <div class="hdr-blur"     aria-hidden="true"></div>
+  <!-- Capa 2: blobs de luz de color que se mueven lentamente (aurora) -->
+  <div class="hdr-aurora"   aria-hidden="true"></div>
+  <!-- Capa 3: rejilla HUD muy sutil -->
+  <div class="hdr-grid"     aria-hidden="true"></div>
+  <!-- Capa 4: scanlines CRT -->
+  <div class="hdr-scanlines" aria-hidden="true"></div>
+
+  <!-- ── 3. CONTENEDOR PRINCIPAL ─────────────────────────────────────── -->
+  <div class="hdr-inner" id="hdr-inner">
+
+    <!-- ══ LOGO ══════════════════════════════════════════════════════ -->
+    <!--
+      El glitch se aplica al div.logo-wrap con ::before y ::after que son
+      copias del logo via background-image, posicionadas encima de la imagen
+      real con clip-path (bandas) y hue-rotate para cambiar el color.
+      Se activan ~10% del tiempo simulando interferencia CRT.
+    -->
+    <a href="/" class="hdr-logo" aria-label="PixelCrit — inicio">
+      <div class="logo-wrap">
+        <img
+          src="/img/logocontexto.webp"
+          alt="PixelCrit"
+          class="logo-img"
+          width="180"
+          height="46"
+          fetchpriority="high"
+          decoding="async"
+        >
       </div>
-      <!-- Texto del logo -->
-      <img src="/img/logocontexto.webp" alt="PixelCrit" class="logo-text">
     </a>
 
-    <!-- Navegación desktop -->
-    <nav class="hidden md:flex gap-6 text-text-secondary font-medium">
-      <a href="/" class="hover:text-primary transition">Inicio</a>
-      <a href="/videojuegos" class="hover:text-primary transition">Videojuegos</a>
-      <a href="/blog" class="hover:text-primary transition">Blog</a>
-      <a href="/contacto" class="hover:text-primary transition">Contacto</a>
+    <!-- ══ NAVEGACIÓN DESKTOP ═════════════════════════════════════════ -->
+    <nav class="hdr-nav" aria-label="Navegación principal">
+      <ul role="list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class={`nav-link${isActive(href) ? ' nav-link--active' : ''}`}
+              aria-current={isActive(href) ? 'page' : undefined}
+            >
+              {/* Bloque hover que se expande desde el centro */}
+              <span class="nav-bg" aria-hidden="true"></span>
+              <span class="nav-label">{label}</span>
+              {/* Punto decorativo en el enlace activo */}
+              {isActive(href) && (
+                <span class="nav-dot" aria-hidden="true"></span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
     </nav>
 
-    <!-- Botón hamburguesa móvil -->
-    <button id="menu-toggle" class="md:hidden text-text-secondary hover:text-primary transition p-2" aria-label="Abrir menú">
-      <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
+    <!-- ══ ZONA DERECHA ═══════════════════════════════════════════════ -->
+    <div class="hdr-actions">
+
+      <!-- ─ Campana de notificaciones (solo con sesión activa) ─ -->
+      <div id="bell-wrapper" class="hidden relative">
+        <button
+          id="bell-btn"
+          class="hdr-icon-btn"
+          aria-label="Notificaciones"
+          aria-expanded="false"
+        >
+          <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span
+            id="bell-badge"
+            class="hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 rounded-full text-[10px] text-white font-bold items-center justify-center px-0.5 leading-none"
+            style="background: var(--color-secondary);"
+          ></span>
+        </button>
+
+        <!-- Dropdown notificaciones -->
+        <div id="bell-dropdown" class="hdr-dropdown hidden absolute right-0 w-80 z-50">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-white/5">
+            <span class="text-text-primary font-semibold text-sm">Notificaciones</span>
+            <a href="/bandeja" class="text-xs font-medium transition" style="color: var(--color-primary)">
+              Ver todas →
+            </a>
+          </div>
+          <div id="bell-loading" class="flex items-center gap-2 px-4 py-4 text-text-muted text-sm">
+            <svg class="w-4 h-4 animate-spin" style="color: var(--color-primary)" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 12 0 12 12H4z"/>
+            </svg>
+            Cargando…
+          </div>
+          <div id="bell-lista"  class="hidden divide-y divide-white/5 max-h-64 overflow-y-auto"></div>
+          <div id="bell-vacio"  class="hidden px-4 py-6 text-center text-text-muted text-sm">Sin notificaciones nuevas</div>
+          <div id="bell-error"  class="hidden px-4 py-3 text-red-400 text-xs"></div>
+          <div class="border-t border-white/5">
+            <a href="/bandeja" class="block text-center text-xs text-text-muted hover:text-text-primary transition px-4 py-3">
+              Ir a la bandeja →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ Avatar / menú de usuario (solo con sesión activa) ─ -->
+      <div id="user-menu-wrapper" class="hidden relative">
+        <button id="user-menu-btn" class="hdr-user-btn" aria-label="Menú de usuario">
+          <span id="user-avatar" class="hdr-avatar"></span>
+          <span id="user-name"   class="hidden md:block text-sm font-medium text-text-secondary max-w-[88px] truncate"></span>
+          <svg class="w-3.5 h-3.5 text-text-muted hidden md:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+
+        <div id="user-dropdown" class="hdr-dropdown hidden absolute right-0 w-48 z-50">
+          <a href="/bandeja" class="flex items-center gap-3 px-4 py-3 text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 transition">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            Bandeja
+          </a>
+          <button
+            id="btn-logout"
+            class="w-full flex items-center gap-3 px-4 py-3 text-sm text-text-secondary hover:text-red-400 hover:bg-red-500/5 transition border-t border-white/5"
+          >
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+
+      <!-- ─ Botones auth (sin sesión) ─ -->
+      <div id="auth-links" class="hidden items-center gap-2">
+        <!--
+          "Entrar": borde gradiente con pseudo-elemento interior.
+          En hover el fondo oscuro desaparece y queda el gradiente visible.
+        -->
+        <a href="/login" class="btn-entrar hidden md:inline-flex items-center">
+          <span>Entrar</span>
+        </a>
+        <!--
+          "Registrarse": gradiente sólido con shimmer (barrido de luz) en loop.
+        -->
+        <a href="/registro" class="btn-registrarse hidden md:inline-flex items-center">
+          Registrarse
+        </a>
+      </div>
+
+      <!-- ─ Hamburguesa → X (solo en móvil) ─ -->
+      <button
+        id="menu-toggle"
+        class="hdr-icon-btn"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+        <div class="hbg" id="hbg">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+    </div><!-- /hdr-actions -->
+  </div><!-- /hdr-inner -->
+
+  <!-- ── 4. MENÚ MÓVIL — slide-down ──────────────────────────────────── -->
+  <div id="mobile-menu" class="mob-menu" aria-hidden="true">
+    <nav aria-label="Navegación móvil">
+      <ul role="list" class="mob-list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a href={href} class={`mob-link${isActive(href) ? ' mob-link--active' : ''}`}>
+              {isActive(href) && <span class="mob-dot" aria-hidden="true"></span>}
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Auth: sin sesión -->
+    <div id="mobile-auth-links" class="hidden flex-col gap-1 pt-3 mt-2 border-t border-white/[0.06]">
+      <a href="/login"    class="mob-link">Iniciar sesión</a>
+      <a href="/registro" class="mob-link font-semibold" style="color: var(--color-primary)">Registrarse →</a>
+    </div>
+
+    <!-- Auth: con sesión -->
+    <div id="mobile-user-links" class="hidden flex-col gap-1 pt-3 mt-2 border-t border-white/[0.06]">
+      <a href="/bandeja"                     class="mob-link">Bandeja de entrada</a>
+      <button id="btn-logout-mobile"         class="mob-link text-left" style="color: #f87171">Cerrar sesión</button>
+    </div>
   </div>
 
-  <!-- Menú móvil -->
-  <nav id="mobile-menu" class="md:hidden hidden border-t border-dark-tertiary bg-dark-primary">
-    <div class="flex flex-col px-4 py-4 gap-1">
-      <a href="/" class="mobile-link">Inicio</a>
-      <a href="/videojuegos" class="mobile-link">Videojuegos</a>
-      <a href="/blog" class="mobile-link">Blog</a>
-      <a href="/contacto" class="mobile-link">Contacto</a>
-    </div>
-  </nav>
 </header>
 
+<!-- ╔══════════════════════════════════════════╗
+     ║  ESTILOS                                  ║
+     ╚══════════════════════════════════════════╝ -->
 <style>
-  .dice-container {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    flex-shrink: 0;
-  }
 
-  .dice-face {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0;
-    scale: 0.9;
-    transition: opacity 0.4s ease-in-out, scale 0.4s ease-in-out;
-  }
+/* ═══════════════════════════════════════════════════════
+   VARIABLES LOCALES (referencia a los tokens globales)
+═══════════════════════════════════════════════════════ */
+#hdr {
+  --p:  #6366f1;   /* primary  */
+  --s:  #ec4899;   /* secondary */
+  --a:  #f59e0b;   /* accent   */
+  --bg: #0f172a;   /* dark-primary */
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
 
-  .dice-face.active {
-    opacity: 1;
-    scale: 1;
-  }
+/* ═══════════════════════════════════════════════════════
+   1. BARRA SUPERIOR — gradiente animado primary→sec→acc
+═══════════════════════════════════════════════════════ */
+.hdr-topbar {
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+  /* El gradiente tiene el doble de ancho para poder desplazarse */
+  background: linear-gradient(
+    90deg,
+    var(--p) 0%,
+    #818cf8 18%,
+    var(--s) 36%,
+    var(--a) 54%,
+    var(--s) 72%,
+    #818cf8 88%,
+    var(--p) 100%
+  );
+  background-size: 240% 100%;
+  animation: topbarFlow 5s linear infinite;
+}
+/* Shimmer extra sobre la barra */
+.hdr-topbar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  width: 35%;
+  animation: topbarScan 2s linear infinite;
+}
+@keyframes topbarFlow {
+  from { background-position: 0%   0%; }
+  to   { background-position: 240% 0%; }
+}
+@keyframes topbarScan {
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(500%);  }
+}
 
-  .dice-container.pulse {
-    animation: heartbeat 0.4s ease-in-out;
-  }
+/* ═══════════════════════════════════════════════════════
+   2. FONDO — blur + aurora animada + grid HUD + scanlines
+═══════════════════════════════════════════════════════ */
 
-  @keyframes heartbeat {
-    0% { transform: scale(1); }
-    30% { transform: scale(1.15); }
-    60% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-  }
+/* Capa 1: glassmorphism — difumina el contenido de la página */
+.hdr-blur {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 12, 24, 0.82);
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  transform: translateZ(0);
+}
+#hdr.scrolled .hdr-blur {
+  background: rgba(8, 12, 24, 0.97);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(99, 102, 241, 0.1);
+}
 
-  .logo-text {
-    height: 150px;
-    width: auto;
-  }
+/*
+  Capa 2: aurora — dos blobs de gradiente radial que se desplazan
+  lentamente en direcciones opuestas, como luz ambiental de neón.
+  Opacidad baja para no distraer, pero claramente visible.
+*/
+.hdr-aurora {
+  position: absolute;
+  inset: -30%;          /* desborda para que el movimiento no deje huecos */
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  background:
+    radial-gradient(ellipse 55% 140% at 10% 50%,  rgba(99, 102, 241, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 120% at 90% 50%,  rgba(236, 72, 153, 0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 30% 80%  at 50% 50%,  rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+  animation: auroraMove 10s ease-in-out infinite alternate;
+}
+@keyframes auroraMove {
+  0%   { transform: translate(0%,    0%) scale(1);    opacity: 0.75; }
+  33%  { transform: translate(4%,    1%) scale(1.04); opacity: 1;    }
+  66%  { transform: translate(-3%,  -1%) scale(0.97); opacity: 0.85; }
+  100% { transform: translate(5%,    0%) scale(1.06); opacity: 1;    }
+}
 
-  .mobile-link {
-    display: block;
-    padding: 0.75rem 1rem;
-    color: var(--color-text-secondary, #94a3b8);
-    font-weight: 500;
-    border-radius: 0.5rem;
-    transition: all 0.2s;
-  }
+/*
+  Capa 3: rejilla HUD — líneas de 1px muy tenues cada 36px.
+  Da la sensación de interfaz de videojuego sin resultar intrusiva.
+*/
+.hdr-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.055) 1px, transparent 1px);
+  background-size: 36px 36px;
+  /* Degradado de opacidad: visible en los bordes, casi invisible en el centro */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+}
 
-  .mobile-link:hover {
-    color: var(--color-primary, #8B5CF6);
-    background: rgba(139, 92, 246, 0.1);
-  }
+/* Capa 4: scanlines CRT (4% opacidad → textura retro imperceptible) */
+.hdr-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.045) 3px,
+    rgba(0, 0, 0, 0.045) 4px
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   3. CONTENEDOR PRINCIPAL
+═══════════════════════════════════════════════════════ */
+.hdr-inner {
+  position: relative;   /* encima del backdrop */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 76px;
+  transition: height 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#hdr.scrolled .hdr-inner {
+  height: 62px;
+}
+/* Pause expensive aurora animation while scrolling */
+#hdr.is-scrolling .hdr-aurora {
+  animation-play-state: paused;
+}
+
+/* ═══════════════════════════════════════════════════════
+   4. LOGO — imagen con glitch CSS vía pseudo-elementos
+═══════════════════════════════════════════════════════ */
+.hdr-logo {
+  flex-shrink: 0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s ease;
+}
+.hdr-logo:hover { transform: scale(1.03); }
+
+/*
+  .logo-wrap es el contenedor relativo que aloja la <img> real
+  y dos pseudo-elementos que son copias del logo via background-image.
+  Los ::before y ::after usan hue-rotate para cambiar el tono de la imagen
+  y clip-path para mostrar solo una banda horizontal, creando el efecto
+  de "desincronización de canal de color" típico del glitch analógico.
+  Se activan ~10% del tiempo para ser sorpresivos sin resultar molestos.
+*/
+.logo-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 66px;
+  width: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+  transform-origin: left center;
+  will-change: transform;
+  /* transform is GPU-only (no layout reflow) — much smoother than height */
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+}
+#hdr.scrolled .logo-img { transform: scale(0.7); }
+.hdr-logo:hover .logo-img {
+  filter: brightness(1.1) drop-shadow(0 0 14px rgba(99, 102, 241, 0.55));
+}
+
+/* Banda superior — tono primary (azul-indigo) */
+.logo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/logocontexto.webp') no-repeat left center / auto 100%;
+  filter: hue-rotate(195deg) brightness(1.5) saturate(2.5);
+  clip-path: polygon(0 12%, 100% 12%, 100% 40%, 0 40%);
+  opacity: 0;
+  z-index: 2;
+  animation: imgGlitchA 7s ease-in-out infinite;
+}
+/* Banda inferior — tono secondary (rosa-magenta) */
+.logo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/logocontexto.webp') no-repeat left center / auto 100%;
+  filter: hue-rotate(310deg) brightness(1.4) saturate(2.5);
+  clip-path: polygon(0 63%, 100% 63%, 100% 86%, 0 86%);
+  opacity: 0;
+  z-index: 2;
+  animation: imgGlitchB 7s ease-in-out 0.2s infinite;
+}
+
+@keyframes imgGlitchA {
+  0%, 87%, 100% { opacity: 0;   transform: translate(0,0); }
+  88%           { opacity: 1;   transform: translate(-4px,  1px); }
+  89%           { opacity: 0.7; transform: translate( 3px, -1px); }
+  90%           { opacity: 1;   transform: translate(-2px,  0);   }
+  91%           { opacity: 0;   transform: translate(0, 0);       }
+  93%           { opacity: 0.5; transform: translate( 3px,  2px); }
+  94%           { opacity: 0;                                       }
+}
+@keyframes imgGlitchB {
+  0%, 88%, 100% { opacity: 0;   transform: translate(0,0);       }
+  89%           { opacity: 1;   transform: translate( 4px, -1px); }
+  90%           { opacity: 0.8; transform: translate(-3px,  1px); }
+  91%           { opacity: 1;   transform: translate( 2px, -2px); }
+  92%           { opacity: 0;   transform: translate(0, 0);       }
+  94%           { opacity: 0.4; transform: translate(-3px,  1px); }
+  95%           { opacity: 0;                                       }
+}
+
+/* ═══════════════════════════════════════════════════════
+   5. NAVEGACIÓN DESKTOP
+═══════════════════════════════════════════════════════ */
+.hdr-nav {
+  /* Centrada con flex-1 */
+  flex: 1;
+  display: none;           /* oculta por defecto (móvil) */
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .hdr-nav { display: flex; }
+}
+
+.hdr-nav ul {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+
+/*
+  Cada enlace tiene:
+  · .nav-bg  → bloque que se expande desde el centro al hover (scaleX 0→1)
+  · .nav-label → texto encima del bloque
+  · .nav-dot   → punto pulsante en el enlace activo
+*/
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #cbd5e1);
+  text-decoration: none;
+  border-radius: 0.625rem;
+  transition: color 0.25s ease;
+  overflow: hidden;
+}
+
+/* Bloque de color que se expande desde el centro */
+.nav-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(236,72,153,0.1) 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 0;
+}
+/* Línea inferior con gradiente — se expande igual que el bloque */
+.nav-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(90deg, var(--p), var(--s));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s;
+}
+
+.nav-link:hover .nav-bg,
+.nav-link--active .nav-bg {
+  transform: scaleX(1);
+}
+.nav-link:hover .nav-bg::after,
+.nav-link--active .nav-bg::after {
+  transform: scaleX(1);
+}
+
+.nav-label {
+  position: relative;
+  z-index: 1;
+}
+.nav-link:hover .nav-label {
+  color: var(--color-text-primary, #f1f5f9);
+}
+.nav-link--active .nav-label {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Punto decorativo pulsante en el activo */
+.nav-dot {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--p), var(--s));
+  box-shadow: 0 0 6px 1px rgba(99, 102, 241, 0.7);
+  animation: dotPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    box-shadow: 0 0 6px 1px rgba(99,102,241,0.7); }
+  50%       { opacity: 0.7; transform: scale(1.35); box-shadow: 0 0 10px 3px rgba(236,72,153,0.5); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   6. ACCIONES (zona derecha)
+═══════════════════════════════════════════════════════ */
+.hdr-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+/* Botón icono (campana, hamburguesa) */
+.hdr-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.625rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted, #94a3b8);
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.hdr-icon-btn:hover {
+  color: var(--p);
+  background: rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.2), 0 0 14px rgba(99,102,241,0.1);
+}
+
+/* Ocultar hamburguesa en md+ aunque .hdr-icon-btn tenga display:flex */
+@media (min-width: 768px) {
+  #menu-toggle { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   7. AVATAR DE USUARIO
+═══════════════════════════════════════════════════════ */
+.hdr-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.625rem 0.25rem 0.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.hdr-user-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.hdr-avatar {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--p);
+  background: rgba(99, 102, 241, 0.18);
+  border: 1.5px solid rgba(99, 102, 241, 0.4);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hdr-user-btn:hover .hdr-avatar {
+  border-color: rgba(99, 102, 241, 0.7);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════
+   8. DROPDOWNS (campana y usuario)
+═══════════════════════════════════════════════════════ */
+.hdr-dropdown {
+  top: calc(100% + 0.75rem);
+  border-radius: 1rem;
+  background: rgba(11, 17, 30, 0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(99, 102, 241, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════
+   9. BOTONES AUTH
+═══════════════════════════════════════════════════════ */
+
+/*
+  "Entrar" — borde gradiente trick:
+  El ::before es el fondo oscuro que tapa el gradiente de fondo,
+  creando solo un "borde" visible. En hover, ::before desaparece
+  y queda el gradiente sólido (texto blanco).
+*/
+.btn-entrar {
+  position: relative;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.625rem;
+  text-decoration: none;
+  /* Gradiente como fondo = "borde" de 1.5px */
+  background: linear-gradient(135deg, var(--p), var(--s));
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+}
+.btn-entrar::before {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: calc(0.625rem - 1px);
+  background: var(--bg);
+  transition: background 0.25s ease;
+  z-index: 0;
+}
+.btn-entrar span {
+  position: relative;
+  z-index: 1;
+  /* Texto con gradiente */
+  background: linear-gradient(135deg, var(--p), var(--s));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: filter 0.25s ease;
+}
+.btn-entrar:hover::before {
+  background: transparent;   /* deja ver el gradiente de fondo */
+}
+.btn-entrar:hover span {
+  background: none;
+  -webkit-text-fill-color: white;
+}
+.btn-entrar:hover {
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+}
+
+/*
+  "Registrarse" — gradiente sólido primary→secondary con shimmer continuo.
+  El ::after es una banda de luz blanca diagonal que viaja de izquierda
+  a derecha indefinidamente.
+*/
+.btn-registrarse {
+  position: relative;
+  overflow: hidden;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 0.625rem;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--p) 0%, var(--s) 100%);
+  box-shadow: 0 2px 18px rgba(99, 102, 241, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-registrarse::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -75%;
+  width: 50%;
+  height: 220%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+.btn-registrarse:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(99, 102, 241, 0.55);
+}
+@keyframes shimmer {
+  0%       { left: -75%;  }
+  55%, 100% { left: 130%; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   10. HAMBURGUESA ANIMADA → X
+═══════════════════════════════════════════════════════ */
+.hbg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  gap: 4.5px;
+}
+.hbg span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition:
+    transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.22s ease,
+    width     0.22s ease;
+  transform-origin: center;
+}
+/* Estado abierto → X */
+.hbg.open span:nth-child(1) { transform: translateY(6px)  rotate(45deg);  }
+.hbg.open span:nth-child(2) { opacity: 0; width: 0; }
+.hbg.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ═══════════════════════════════════════════════════════
+   11. MENÚ MÓVIL — slide-down suave con glassmorphism
+═══════════════════════════════════════════════════════ */
+.mob-menu {
+  overflow: hidden;
+  max-height: 0;
+  border-top: 1px solid transparent;
+  transition:
+    max-height     0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    border-top-color 0.38s ease;
+}
+.mob-menu.open {
+  max-height: 520px;
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+.mob-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+/* Fondo del menú */
+.mob-menu > * {
+  background: rgba(11, 17, 30, 0.98);
+  backdrop-filter: blur(24px);
+}
+.mob-menu nav,
+.mob-menu > div {
+  padding: 0.75rem 1rem;
+}
+.mob-menu nav { padding-bottom: 0; }
+
+/* Links del menú móvil */
+.mob-link {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #cbd5e1);
+  text-decoration: none;
+  border-radius: 0.625rem;
+  background: none; border: none;
+  cursor: pointer;
+  width: 100%; text-align: left; font-family: inherit;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.mob-link:hover {
+  color: var(--color-text-primary, #f1f5f9);
+  background: rgba(99, 102, 241, 0.09);
+  transform: translateX(4px);
+}
+.mob-link--active {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.1);
+}
+/* Punto del activo en móvil */
+.mob-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--p), var(--s));
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.7);
+  flex-shrink: 0;
+}
+
 </style>
 
+<!-- ╔══════════════════════════════════════════╗
+     ║  JAVASCRIPT                               ║
+     ╚══════════════════════════════════════════╝ -->
 <script>
-  // Dado animado
-  const container = document.querySelector<HTMLDivElement>('.dice-container');
-  const faces = document.querySelectorAll<HTMLImageElement>('.dice-face');
-  let current = 0;
+  const API_URL = '/api';
 
-  setInterval(() => {
-    faces[current].classList.remove('active');
+  /* ── Auth: mostrar/ocultar zonas según sesión ─────────────────────── */
+  const token   = localStorage.getItem('pixelcrit_token');
+  const userRaw = localStorage.getItem('pixelcrit_user');
+  const user    = userRaw ? JSON.parse(userRaw) : null;
 
-    let next;
-    do {
-      next = Math.floor(Math.random() * faces.length);
-    } while (next === current);
-    current = next;
+  if (token && user) {
+    document.getElementById('bell-wrapper')?.classList.remove('hidden');
 
-    faces[current].classList.add('active');
+    const umw = document.getElementById('user-menu-wrapper');
+    umw?.classList.remove('hidden');
 
-    container?.classList.remove('pulse');
-    void container?.offsetWidth;
-    container?.classList.add('pulse');
-  }, 1200);
+    const mobileUserLinks = document.getElementById('mobile-user-links');
+    mobileUserLinks?.classList.remove('hidden');
+    mobileUserLinks?.classList.add('flex');
 
-  // Menú hamburguesa
-  const toggle = document.getElementById('menu-toggle');
+    const avatarEl = document.getElementById('user-avatar');
+    const nameEl   = document.getElementById('user-name');
+    if (avatarEl) avatarEl.textContent = (user.username?.[0] ?? '?').toUpperCase();
+    if (nameEl)   nameEl.textContent   = user.username ?? '';
+
+    fetchNotificaciones();
+  } else {
+    const al = document.getElementById('auth-links');
+    al?.classList.remove('hidden');
+    al?.classList.add('flex');
+
+    const mal = document.getElementById('mobile-auth-links');
+    mal?.classList.remove('hidden');
+    mal?.classList.add('flex');
+  }
+
+  /* ── Scroll compacto ──────────────────────────────────────────────── */
+  const hdr = document.getElementById('hdr');
+  let ticking = false;
+  let scrollEndTimer: ReturnType<typeof setTimeout>;
+
+  window.addEventListener('scroll', () => {
+    // Pause aurora while scrolling to free GPU bandwidth
+    if (!hdr?.classList.contains('is-scrolling')) {
+      hdr?.classList.add('is-scrolling');
+    }
+    clearTimeout(scrollEndTimer);
+    scrollEndTimer = setTimeout(() => {
+      hdr?.classList.remove('is-scrolling');
+    }, 200);
+
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        hdr?.classList.toggle('scrolled', window.scrollY > 60);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  /* ── Hamburguesa ──────────────────────────────────────────────────── */
+  const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
+  const hbgEl      = document.getElementById('hbg');
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = !mobileMenu?.classList.contains('hidden');
-    mobileMenu?.classList.toggle('hidden');
-    iconOpen?.classList.toggle('hidden');
-    iconClose?.classList.toggle('hidden');
-    toggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
+  menuToggle?.addEventListener('click', () => {
+    const isOpen = mobileMenu?.classList.contains('open');
+    mobileMenu?.classList.toggle('open');
+    hbgEl?.classList.toggle('open');
+    mobileMenu?.setAttribute('aria-hidden', String(isOpen));
+    menuToggle.setAttribute('aria-expanded', String(!isOpen));
+    menuToggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
+  });
+
+  /* ── Bell dropdown ────────────────────────────────────────────────── */
+  const bellBtn      = document.getElementById('bell-btn');
+  const bellDropdown = document.getElementById('bell-dropdown');
+  const userDropdown = document.getElementById('user-dropdown');
+
+  bellBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const opening = bellDropdown?.classList.contains('hidden');
+    bellDropdown?.classList.toggle('hidden');
+    bellBtn.setAttribute('aria-expanded', String(!!opening));
+    userDropdown?.classList.add('hidden');
+  });
+
+  /* ── User dropdown ────────────────────────────────────────────────── */
+  document.getElementById('user-menu-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userDropdown?.classList.toggle('hidden');
+    bellDropdown?.classList.add('hidden');
+  });
+
+  document.addEventListener('click', () => {
+    bellDropdown?.classList.add('hidden');
+    userDropdown?.classList.add('hidden');
+  });
+
+  /* ── Logout ───────────────────────────────────────────────────────── */
+  function logout() {
+    localStorage.removeItem('pixelcrit_token');
+    localStorage.removeItem('pixelcrit_user');
+    window.location.href = '/';
+  }
+  document.getElementById('btn-logout')?.addEventListener('click', logout);
+  document.getElementById('btn-logout-mobile')?.addEventListener('click', logout);
+
+  /* ── Notificaciones ───────────────────────────────────────────────── */
+  const bellBadge   = document.getElementById('bell-badge');
+  const bellLoading = document.getElementById('bell-loading');
+  const bellLista   = document.getElementById('bell-lista');
+  const bellVacio   = document.getElementById('bell-vacio');
+  const bellError   = document.getElementById('bell-error');
+
+  function esc(s: unknown) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  async function fetchNotificaciones() {
+    try {
+      const res = await fetch(
+        `${API_URL}/notificaciones?filters[leida][$eq]=false` +
+        `&populate[respuesta][populate][autor]=true` +
+        `&sort=createdAt:desc&pagination[limit]=5`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!res.ok) throw new Error(`${res.status}`);
+      const { data } = await res.json();
+
+      bellLoading?.classList.add('hidden');
+
+      if (!data?.length) { bellVacio?.classList.remove('hidden'); return; }
+
+      /* Badge */
+      if (bellBadge) {
+        bellBadge.textContent = data.length > 9 ? '9+' : String(data.length);
+        bellBadge.classList.remove('hidden');
+        bellBadge.classList.add('flex');
+      }
+
+      /* Lista */
+      if (bellLista) {
+        bellLista.innerHTML = (data as any[]).map(n => {
+          const autor    = n.respuesta?.autor?.username ?? 'Alguien';
+          const contenido = n.respuesta?.contenido ?? '';
+          return `
+            <button class="bell-item w-full text-left px-4 py-3 hover:bg-white/5 transition flex items-start gap-3" data-id="${n.id}">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.25)">
+                <svg class="w-4 h-4" style="color:#6366f1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-4 4v-4z"/>
+                </svg>
+              </span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm text-text-primary text-left leading-snug">
+                  <strong>${esc(autor)}</strong> respondió a tu comentario
+                </p>
+                ${contenido ? `<p class="text-xs text-text-muted mt-0.5 line-clamp-1">"${esc(contenido)}"</p>` : ''}
+              </div>
+              <span class="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style="background:#6366f1;box-shadow:0 0 6px rgba(99,102,241,.8)"></span>
+            </button>`;
+        }).join('');
+        bellLista.classList.remove('hidden');
+      }
+    } catch {
+      bellLoading?.classList.add('hidden');
+      if (bellError) { bellError.textContent = 'Error al cargar.'; bellError.classList.remove('hidden'); }
+    }
+  }
+
+  /* Clic en notificación → marcar leída y redirigir */
+  bellLista?.addEventListener('click', async (e) => {
+    const btn = (e.target as Element)?.closest<HTMLButtonElement>('.bell-item');
+    if (!btn) return;
+    btn.style.opacity = '0.5';
+    btn.disabled = true;
+    try {
+      await fetch(`${API_URL}/notificaciones/${btn.dataset.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ data: { leida: true } }),
+      });
+    } finally { window.location.href = '/bandeja'; }
   });
 </script>

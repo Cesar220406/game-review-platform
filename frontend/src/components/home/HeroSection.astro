@@ -13,7 +13,15 @@ const { etiqueta, titulo, tituloDestacado, descripcion, botonPrincipal, botonSec
 ---
 <section class="relative overflow-hidden">
   <div class="absolute inset-0">
-    <img src={imagenUrl} alt="" class="w-full h-full object-cover" />
+    <img
+      src={imagenUrl}
+      alt=""
+      class="w-full h-full object-cover"
+      width="1920"
+      height="1080"
+      fetchpriority="high"
+      decoding="async"
+    />
     <div class="absolute inset-0 bg-linear-to-r from-dark-primary via-dark-primary/90 to-dark-primary/40"></div>
   </div>
 

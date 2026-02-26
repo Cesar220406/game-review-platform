@@ -10,6 +10,7 @@ export default defineConfig({
       host: '0.0.0.0',
       allowedHosts: ['pixelcrit.es', 'www.pixelcrit.es'],
       proxy: {
+        '/api': 'http://localhost:1337',
         '/uploads': 'http://localhost:1337',
       },
     },

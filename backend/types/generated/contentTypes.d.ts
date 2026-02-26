@@ -441,6 +441,10 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    comentarios: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comentario.comentario'
+    >;
     contenido: Schema.Attribute.RichText & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -466,6 +470,47 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiComentarioComentario extends Struct.CollectionTypeSchema {
+  collectionName: 'comentarios';
+  info: {
+    displayName: 'Comentario';
+    pluralName: 'comentarios';
+    singularName: 'comentario';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    articulo: Schema.Attribute.Relation<'manyToOne', 'api::articulo.articulo'>;
+    autor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    contenido: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comentario.comentario'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    respuestas: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::respuesta.respuesta'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    videojuego: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::videojuego.videojuego'
+    >;
   };
 }
 
@@ -572,6 +617,43 @@ export interface ApiHomeHome extends Struct.SingleTypeSchema {
     seccionDestacadosSubtitulo: Schema.Attribute.String;
     seccionDestacadosTitulo: Schema.Attribute.String;
     seccionGenerosTitulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiNotificacionNotificacion
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notificacions';
+  info: {
+    displayName: 'Notificacion';
+    pluralName: 'notificacions';
+    singularName: 'notificacion';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    destinatario: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    leida: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notificacion.notificacion'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    respuesta: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::respuesta.respuesta'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -732,6 +814,46 @@ export interface ApiPlataformaPlataforma extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiRespuestaRespuesta extends Struct.CollectionTypeSchema {
+  collectionName: 'respuestas';
+  info: {
+    displayName: 'Respuesta';
+    pluralName: 'respuestas';
+    singularName: 'respuesta';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    autor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    comentario: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::comentario.comentario'
+    >;
+    contenido: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::respuesta.respuesta'
+    > &
+      Schema.Attribute.Private;
+    notificacions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notificacion.notificacion'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiTituloTitulo extends Struct.SingleTypeSchema {
   collectionName: 'titulos';
   info: {
@@ -780,6 +902,10 @@ export interface ApiVideojuegoVideojuego extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    comentarios: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comentario.comentario'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1276,10 +1402,13 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    comentarios: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comentario.comentario'
+    >;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -1296,6 +1425,10 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    notificacions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notificacion.notificacion'
+    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -1304,6 +1437,10 @@ export interface PluginUsersPermissionsUser
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
+    respuestas: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::respuesta.respuesta'
+    >;
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
@@ -1332,13 +1469,16 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::articulo.articulo': ApiArticuloArticulo;
+      'api::comentario.comentario': ApiComentarioComentario;
       'api::contacto.contacto': ApiContactoContacto;
       'api::genero.genero': ApiGeneroGenero;
       'api::home.home': ApiHomeHome;
+      'api::notificacion.notificacion': ApiNotificacionNotificacion;
       'api::pagina-blog.pagina-blog': ApiPaginaBlogPaginaBlog;
       'api::pagina-contacto.pagina-contacto': ApiPaginaContactoPaginaContacto;
       'api::pagina-videojuego-detalle.pagina-videojuego-detalle': ApiPaginaVideojuegoDetallePaginaVideojuegoDetalle;
       'api::plataforma.plataforma': ApiPlataformaPlataforma;
+      'api::respuesta.respuesta': ApiRespuestaRespuesta;
       'api::titulo.titulo': ApiTituloTitulo;
       'api::videojuego.videojuego': ApiVideojuegoVideojuego;
       'plugin::content-releases.release': PluginContentReleasesRelease;

@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comentarios",
+  "info": {
+    "singularName": "comentario",
+    "pluralName": "comentarios",
+    "displayName": "Comentario"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "contenido": {
+      "type": "text",
+      "required": true
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "comentarios"
+    },
+    "videojuego": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::videojuego.videojuego",
+      "inversedBy": "comentarios"
+    },
+    "articulo": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::articulo.articulo",
+      "inversedBy": "comentarios"
+    },
+    "respuestas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::respuesta.respuesta",
+      "mappedBy": "comentario"
+    }
+  }
+}

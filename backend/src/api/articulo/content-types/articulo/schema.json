@@ -46,6 +46,12 @@
     },
     "metaDescription": {
       "type": "text"
+    },
+    "comentarios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comentario.comentario",
+      "mappedBy": "articulo"
     }
   }
 }

@@ -1,0 +1,280 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Bandeja de entrada — PixelCrit" description="Tus notificaciones en PixelCrit.">
+  <div class="max-w-3xl mx-auto px-4 py-16">
+
+    <!-- Redirigiendo (muestra mientras se comprueba auth) -->
+    <div id="bandeja-auth-check" class="flex items-center justify-center py-20">
+      <svg class="w-6 h-6 animate-spin text-primary mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 12 0 12 12H4z"></path>
+      </svg>
+      <span class="text-text-muted">Verificando sesión…</span>
+    </div>
+
+    <!-- Contenido principal (oculto hasta auth ok) -->
+    <div id="bandeja-content" class="hidden">
+      <div class="flex items-center justify-between mb-8 gap-4 flex-wrap">
+        <h1 class="font-bungee text-3xl text-text-primary uppercase flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          Bandeja de entrada
+        </h1>
+        <button
+          id="btn-marcar-todas"
+          class="hidden items-center gap-2 text-sm bg-dark-secondary hover:bg-dark-tertiary border border-white/10 text-text-secondary rounded-lg px-4 py-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span id="btn-marcar-text">Marcar todas como leídas</span>
+          <svg id="btn-marcar-spinner" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 12 0 12 12H4z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="bandeja-loading" class="flex items-center gap-3 text-text-muted py-12">
+        <svg class="w-5 h-5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 12 0 12 12H4z"></path>
+        </svg>
+        Cargando notificaciones…
+      </div>
+
+      <!-- Error -->
+      <div id="bandeja-error" class="hidden bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg px-4 py-3 text-sm mb-6"></div>
+
+      <!-- Sin notificaciones -->
+      <div id="bandeja-vacio" class="hidden text-center py-16">
+        <div class="w-16 h-16 rounded-full bg-dark-secondary border border-white/5 flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </div>
+        <p class="text-text-muted text-lg">No tienes notificaciones.</p>
+        <p class="text-text-muted/60 text-sm mt-1">Cuando alguien responda a tus comentarios, aparecerán aquí.</p>
+      </div>
+
+      <!-- Lista notificaciones -->
+      <div id="bandeja-lista" class="hidden flex flex-col gap-3"></div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const API_URL = '/api';
+
+  const elAuthCheck = document.getElementById('bandeja-auth-check');
+  const elContent = document.getElementById('bandeja-content');
+  const elLoading = document.getElementById('bandeja-loading');
+  const elError = document.getElementById('bandeja-error');
+  const elVacio = document.getElementById('bandeja-vacio');
+  const elLista = document.getElementById('bandeja-lista');
+  const btnMarcarTodas = document.getElementById('btn-marcar-todas');
+  const btnMarcarText = document.getElementById('btn-marcar-text');
+  const btnMarcarSpinner = document.getElementById('btn-marcar-spinner');
+
+  const token = localStorage.getItem('pixelcrit_token');
+  const userRaw = localStorage.getItem('pixelcrit_user');
+  const user = userRaw ? JSON.parse(userRaw) : null;
+
+  // Auth guard
+  if (!token || !user) {
+    window.location.href = '/login';
+  } else {
+    elAuthCheck?.classList.add('hidden');
+    elContent?.classList.remove('hidden');
+    cargarNotificaciones();
+  }
+
+  function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString('es-ES', {
+      year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit',
+    });
+  }
+
+  function esc(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderNotificacion(n) {
+    const { id, leida, createdAt } = n;
+    const autorUsername = n.respuesta?.autor?.username ?? 'Alguien';
+    const bgClass = leida
+      ? 'bg-dark-secondary border-white/5 opacity-60'
+      : 'bg-primary/5 border-primary/20';
+    const badgeHtml = leida
+      ? ''
+      : `<span class="inline-flex items-center text-xs bg-primary/20 text-primary rounded-full px-2 py-0.5 font-medium">Nueva</span>`;
+
+    return `
+      <div
+        class="rounded-xl border ${bgClass} p-5 flex items-start gap-4 transition"
+        data-notif-id="${id}"
+        data-leida="${leida}"
+      >
+        <!-- Icono -->
+        <div class="w-10 h-10 rounded-full ${leida ? 'bg-dark-tertiary' : 'bg-primary/20'} flex items-center justify-center flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ${leida ? 'text-text-muted' : 'text-primary'}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-4 4v-4z"/>
+          </svg>
+        </div>
+
+        <!-- Contenido -->
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <p class="text-text-primary text-sm">
+              <span class="font-semibold">${esc(autorUsername)}</span>
+              respondió a tu comentario
+            </p>
+            ${badgeHtml}
+          </div>
+          ${n.respuesta?.contenido
+            ? `<p class="text-text-muted text-xs line-clamp-2 mt-1">"${esc(n.respuesta.contenido)}"</p>`
+            : ''}
+          <p class="text-xs text-text-muted/60 mt-2">${formatDate(createdAt)}</p>
+        </div>
+
+        <!-- Acción -->
+        ${!leida
+          ? `<button
+               class="btn-marcar-leida flex-shrink-0 text-xs text-text-muted hover:text-primary transition"
+               data-id="${id}"
+               title="Marcar como leída"
+             >
+               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+               </svg>
+             </button>`
+          : ''}
+      </div>`;
+  }
+
+  async function cargarNotificaciones() {
+    elLoading?.classList.remove('hidden');
+    elLista?.classList.add('hidden');
+    elVacio?.classList.add('hidden');
+    btnMarcarTodas?.classList.add('hidden');
+
+    try {
+      const url = `${API_URL}/notificaciones`
+        + `?filters[destinatario][$eq]=${user.id}`
+        + `&populate[respuesta][populate][autor]=true`
+        + `&sort=createdAt:desc`;
+
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error(`Error ${res.status}`);
+      const { data } = await res.json();
+
+      elLoading?.classList.add('hidden');
+
+      if (!data || data.length === 0) {
+        elVacio?.classList.remove('hidden');
+        return;
+      }
+
+      elLista.innerHTML = data.map(renderNotificacion).join('');
+      elLista?.classList.remove('hidden');
+      elLista?.classList.add('flex', 'flex-col', 'gap-3');
+
+      const noLeidas = data.filter(n => !n.leida);
+      if (noLeidas.length > 0) {
+        btnMarcarTodas?.classList.remove('hidden');
+        btnMarcarTodas?.classList.add('flex');
+        btnMarcarTodas.dataset.noLeidas = JSON.stringify(noLeidas.map(n => n.id));
+      }
+    } catch (err) {
+      elLoading?.classList.add('hidden');
+      elError.textContent = `No se pudieron cargar las notificaciones: ${err.message}`;
+      elError?.classList.remove('hidden');
+    }
+  }
+
+  async function marcarLeida(id) {
+    const res = await fetch(`${API_URL}/notificaciones/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ data: { leida: true } }),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}`);
+  }
+
+  // Marcar una notificación individual
+  elLista?.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-marcar-leida');
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    btn.disabled = true;
+
+    try {
+      await marcarLeida(id);
+
+      const notifEl = elLista.querySelector(`[data-notif-id="${id}"]`);
+      if (notifEl) {
+        notifEl.classList.remove('bg-primary/5', 'border-primary/20');
+        notifEl.classList.add('bg-dark-secondary', 'border-white/5', 'opacity-60');
+        notifEl.dataset.leida = 'true';
+        btn.remove();
+        // Remove "Nueva" badge
+        notifEl.querySelector('.bg-primary\\/20.text-primary.rounded-full')?.remove();
+      }
+
+      // Hide "marcar todas" if no more unread
+      const remaining = elLista.querySelectorAll('[data-leida="false"]');
+      if (remaining.length === 0) {
+        btnMarcarTodas?.classList.add('hidden');
+      }
+    } catch (err) {
+      btn.disabled = false;
+    }
+  });
+
+  // Marcar todas como leídas
+  btnMarcarTodas?.addEventListener('click', async () => {
+    const ids = JSON.parse(btnMarcarTodas.dataset.noLeidas ?? '[]');
+    if (ids.length === 0) return;
+
+    btnMarcarTodas.disabled = true;
+    btnMarcarText.textContent = 'Marcando…';
+    btnMarcarSpinner?.classList.remove('hidden');
+
+    try {
+      await Promise.all(ids.map(id => marcarLeida(id)));
+
+      // Update all unread visually
+      elLista.querySelectorAll('[data-leida="false"]').forEach(el => {
+        el.classList.remove('bg-primary/5', 'border-primary/20');
+        el.classList.add('bg-dark-secondary', 'border-white/5', 'opacity-60');
+        el.dataset.leida = 'true';
+        el.querySelector('.btn-marcar-leida')?.remove();
+        el.querySelector('.bg-primary\\/20.text-primary.rounded-full')?.remove();
+      });
+
+      btnMarcarTodas?.classList.add('hidden');
+    } catch (err) {
+      elError.textContent = `Error al marcar notificaciones: ${err.message}`;
+      elError?.classList.remove('hidden');
+      btnMarcarTodas.disabled = false;
+      btnMarcarText.textContent = 'Marcar todas como leídas';
+      btnMarcarSpinner?.classList.add('hidden');
+    }
+  });
+</script>

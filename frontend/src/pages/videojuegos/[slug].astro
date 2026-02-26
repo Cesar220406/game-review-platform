@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { getVideojuegoPorSlug, getPaginaVideojuegoDetalle } from "../../lib/api.js";
 import { marked } from 'marked';
+import SeccionComentarios from "../../components/shared/SeccionComentarios.astro";
 
 export const prerender = false;
 
@@ -44,7 +45,15 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
       <!-- IMAGEN -->
       <div class="w-full md:w-2/5 rounded-xl overflow-hidden border border-white/10">
         {imagenUrl ? (
-          <img src={imagenUrl} alt={titulo} class="w-full h-full object-cover" />
+          <img
+            src={imagenUrl}
+            alt={titulo}
+            class="w-full h-full object-cover"
+            width="600"
+            height="800"
+            fetchpriority="high"
+            decoding="async"
+          />
         ) : (
           <div class="w-full aspect-video bg-dark-secondary flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-text-muted/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -134,6 +143,9 @@ const plataformasNombres = plataformas?.map((p: any) => p.nombre) ?? [];
         />
       </div>
     )}
+
+    <!-- COMENTARIOS -->
+    <SeccionComentarios entidadTipo="videojuego" entidadId={videojuego.id} />
 
     <!-- VOLVER -->
     <div class="mt-10">

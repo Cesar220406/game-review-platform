@@ -78,6 +78,12 @@
       "relation": "manyToMany",
       "target": "api::plataforma.plataforma",
       "mappedBy": "videojuegos"
+    },
+    "comentarios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comentario.comentario",
+      "mappedBy": "videojuego"
     }
   }
 }

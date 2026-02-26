@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "respuestas",
+  "info": {
+    "singularName": "respuesta",
+    "pluralName": "respuestas",
+    "displayName": "Respuesta"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "contenido": {
+      "type": "text",
+      "required": true
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "respuestas"
+    },
+    "comentario": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::comentario.comentario",
+      "inversedBy": "respuestas"
+    },
+    "notificacions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notificacion.notificacion",
+      "mappedBy": "respuesta"
+    }
+  }
+}

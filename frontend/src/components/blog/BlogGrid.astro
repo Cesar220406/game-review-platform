@@ -25,7 +25,15 @@ const { articulos, textoLeerArticulo, textoSinResultados, textoVerTodos } = Astr
         <article class="grid md:grid-cols-[280px_1fr] gap-0 bg-dark-secondary rounded-xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all duration-300">
           <div class="aspect-[16/10] md:aspect-auto overflow-hidden">
             {articulo.imagen ? (
-              <img src={articulo.imagen} alt={articulo.titulo} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img
+                src={articulo.imagen}
+                alt={articulo.titulo}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                width="280"
+                height="180"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <div class="w-full h-full min-h-[180px] bg-dark-tertiary flex items-center justify-center">
                 <span class="text-text-muted text-sm">Sin imagen</span>

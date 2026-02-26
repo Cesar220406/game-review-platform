@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { getArticuloPorSlug } from "../../lib/api.js";
 import { marked } from "marked";
 import { calcularTiempoLectura } from "../../lib/utils.js";
+import SeccionComentarios from "../../components/shared/SeccionComentarios.astro";
 
 export const prerender = false;
 
@@ -24,7 +25,8 @@ const {
   metaDescription,
 } = articulo;
 
-const contenidoHtml = contenido ? marked(contenido) : null;
+const contenidoSinH1 = contenido ? contenido.replace(/^#[^\n]*\n+/, '') : null;
+const contenidoHtml = contenidoSinH1 ? marked(contenidoSinH1) : null;
 const imagenUrl = imagenDestacada?.url
   ? imagenDestacada.url
   : null;
@@ -74,6 +76,10 @@ const imagenUrl = imagenDestacada?.url
           src={imagenUrl}
           alt={titulo}
           class="w-full h-auto object-cover"
+          width="900"
+          height="500"
+          fetchpriority="high"
+          decoding="async"
         />
       </div>
     )}
@@ -95,6 +101,9 @@ const imagenUrl = imagenDestacada?.url
         <p class="text-text-muted">Este artículo aún no tiene contenido.</p>
       </div>
     )}
+
+    <!-- COMENTARIOS -->
+    <SeccionComentarios entidadTipo="articulo" entidadId={articulo.id} />
 
     <!-- VOLVER (PIE) -->
     <div class="mt-16 pt-8 border-t border-white/5">
