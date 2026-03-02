@@ -15,8 +15,9 @@
   const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d')!;
 
-  const PARTICLE_COUNT = 80;
-  const MAX_DISTANCE = 150;
+  const isMobile = window.innerWidth < 768;
+  const PARTICLE_COUNT = isMobile ? 30 : 80;
+  const MAX_DISTANCE = isMobile ? 0 : 150;
 
   interface Particle {
     x: number;

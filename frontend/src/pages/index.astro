@@ -35,6 +35,7 @@ const heroImagenUrl = heroImagen?.url ?? '/img/imagenhero.webp';
 ---
 
 <Layout title={metaTitle} description={metaDescription}>
+  <link slot="head" rel="preload" as="image" href={heroImagenUrl} fetchpriority="high" />
   <HeroSection
     etiqueta={heroEtiqueta}
     titulo={heroTitulo}
